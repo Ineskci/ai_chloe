@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_11_195658) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_11_210937) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -23,13 +23,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_11_195658) do
     t.text "job_context"
     t.string "job_url"
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_interview_sessions_on_user_id"
   end
 
   create_table "messages", force: :cascade do |t|
     t.text "content"
     t.datetime "created_at", null: false
+    t.bigint "interview_session_id", null: false
     t.string "role"
     t.datetime "updated_at", null: false
+    t.index ["interview_session_id"], name: "index_messages_on_interview_session_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -43,4 +47,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_11_195658) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
+
+  add_foreign_key "interview_sessions", "users"
+  add_foreign_key "messages", "interview_sessions"
 end

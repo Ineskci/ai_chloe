@@ -1,6 +1,7 @@
-class CreateInterviewSessions < ActiveRecord::Migration[8.1]
+class CreateInterviewSession < ActiveRecord::Migration[8.1]
   def change
     create_table :interview_sessions do |t|
+      t.references :user, null: false, foreign_key: true
       t.string :job_url
       t.text :description
       t.text :job_context
