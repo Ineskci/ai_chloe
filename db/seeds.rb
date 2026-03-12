@@ -14,8 +14,13 @@ puts "Cleaning database..."
 Message.destroy_all
 Chat.destroy_all
 Job.destroy_all
+User.destroy_all
 
-# 2. Create the instances 🏗️
+# 2. Create users
+puts "Creating users..."
+User.create!(email: "test@test.com", password: "123456")
+
+# 3. Create the instances 🏗️
 puts "Creating jobs..."
 Job.create!([
   {

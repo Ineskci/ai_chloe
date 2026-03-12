@@ -5,6 +5,6 @@ class JobsController < ApplicationController
 
   def show
     @job = Job.find(params[:id])
-    @chats = @job.chats.where(user: current_user)
+    @chats = @job.chats.where(user_id: current_user.id)
   end
 end

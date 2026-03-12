@@ -1,0 +1,9 @@
+<div class="container my-5">
+  <%= link_to "← #{@job.job_title}", job_path(@job) %>
+
+  <h1>New Interview for <%= @job.job_title %></h1>
+
+  <%= simple_form_for [@job, @chat] do |f| %>
+    <%= f.button :submit, 'Start Interview', class: 'btn btn-primary' %>
+  <% end %>
+</div>
