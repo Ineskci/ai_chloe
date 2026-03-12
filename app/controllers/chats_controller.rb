@@ -7,7 +7,7 @@ class ChatsController < ApplicationController
   def create
     @job = Job.find(params[:job_id])
 
-    @chat = Chat.new(title: "Untitled")
+    @chat = Chat.new(title: Chat::DEFAULT_TITLE)
     @chat.job = @job
     @chat.user = current_user
 
@@ -20,7 +20,9 @@ class ChatsController < ApplicationController
   end
 
   def show
+    @job = Job.find(params[:job_id])
     @chat    = current_user.chats.find(params[:id])
     @message = Message.new
+    @messages = @chat.messages
   end
 end
