@@ -7,3 +7,34 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+# db/seeds.rb
+
+# 1. Clean the database 🗑️
+puts "Cleaning database..."
+Message.destroy_all
+Chat.destroy_all
+Job.destroy_all
+
+# 2. Create the instances 🏗️
+puts "Creating jobs..."
+Job.create!([
+  {
+    job_title: "Junior Developer",
+    job_description: "Entry-level software development role focusing on Ruby on Rails and JavaScript."
+  },
+  {
+    job_title: "Product Manager",
+    job_description: "Managing product roadmap, working with engineering and design teams."
+  },
+  {
+    job_title: "Data Analyst",
+    job_description: "Analysing data, building dashboards and reporting insights to stakeholders."
+  },
+  {
+    job_title: "UX Designer",
+    job_description: "Designing user interfaces and conducting user research."
+  }
+])
+
+# 3. Display a message 🎉
+puts "Finished! Created #{Job.count} jobs."
