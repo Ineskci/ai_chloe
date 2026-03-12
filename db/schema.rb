@@ -10,30 +10,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_12_143826) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_12_175910) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
-  create_table "interview_sessions", force: :cascade do |t|
+  create_table "chats", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.text "cv_context"
-    t.text "description"
-    t.text "feedback"
-    t.string "interview_type"
-    t.text "job_context"
-    t.string "job_url"
+    t.bigint "jobs_id", null: false
+    t.string "title"
     t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
-    t.index ["user_id"], name: "index_interview_sessions_on_user_id"
+    t.bigint "users_id", null: false
+    t.index ["jobs_id"], name: "index_chats_on_jobs_id"
+    t.index ["users_id"], name: "index_chats_on_users_id"
+  end
+
+  create_table "jobs", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "job_description"
+    t.string "job_title"
+    t.datetime "updated_at", null: false
   end
 
   create_table "messages", force: :cascade do |t|
+    t.bigint "chats_id", null: false
     t.text "content"
     t.datetime "created_at", null: false
-    t.bigint "interview_session_id", null: false
     t.string "role"
     t.datetime "updated_at", null: false
-    t.index ["interview_session_id"], name: "index_messages_on_interview_session_id"
+    t.index ["chats_id"], name: "index_messages_on_chats_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -50,6 +54,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_12_143826) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "interview_sessions", "users"
-  add_foreign_key "messages", "interview_sessions"
+  add_foreign_key "chats", "jobs", column: "jobs_id"
+  add_foreign_key "chats", "users", column: "users_id"
+  add_foreign_key "messages", "chats", column: "chats_id"
 end
