@@ -3,19 +3,25 @@ class MessagesController < ApplicationController
 
   def create
     @job = Job.find(params[:job_id])
-    @chat = Chat.find(params[:chat_id])
+    @chat = current_user.chats.find(params[:chat_id])
     @message = Message.new(role: "user", content: params[:message][:content], chat: @chat)
 
     if @message.save
-      ruby_llm_chat = RubyLLM.chat
-      response = ruby_llm_chat.with_instructions(instructions).ask(@message.content)
-      Message.create(role: "assistant", content: response.content, chat: @chat)
-
+      @ruby_llm_chat = RubyLLM.chat
+      build_conversation_history
+      response = @ruby_llm_chat.with_instructions(instructions).ask(@message.content)
+      @chat.messages.create(role: "assistant", content: response.content)
       @chat.generate_title_from_first_message
 
-      redirect_to job_chat_path(@job, @chat)
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to job_chat_path(@job, @chat) }
+      end
     else
-      render "chats/show", status: :unprocessable_entity
+      respond_to do |format|
+        format.turbo_stream { render turbo_stream: turbo_stream.update("new_message_container", partial: "messages/form", locals: { job: @job, chat: @chat, message: @message }) }
+        format.html { render "chats/show", status: :unprocessable_entity }
+      end
     end
   end
 
@@ -27,5 +33,11 @@ class MessagesController < ApplicationController
 
   def instructions
     [SYSTEM_PROMPT, job_context].compact.join("\n\n")
+  end
+
+  def build_conversation_history
+    @chat.messages.each do |message|
+      @ruby_llm_chat.add_message(role: message.role, content: message.content)
+    end
   end
 end
