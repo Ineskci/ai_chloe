@@ -2,6 +2,7 @@ class Chat < ApplicationRecord
   belongs_to :user
   belongs_to :job
   has_many :messages, dependent: :destroy
+  validates :title, length: { maximum: 50 }
 
   DEFAULT_TITLE = "Untitled"
   TITLE_PROMPT = <<~PROMPT
