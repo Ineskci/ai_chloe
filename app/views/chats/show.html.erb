@@ -1,14 +1,111 @@
-<!-- app/views/chats/show.html.erb -->
-<div class="container my-5">
-  <%= link_to "← #{@chat.job.job_title}", job_path(@chat.job) %>
+<%# Hide Bootstrap sidebar for this page — chat has its own full layout %>
+<% content_for :no_layout, true %>
 
-  <h1 id="chat_title"><%= @chat.title %></h1>
+<%# ============================================ %>
+<%# TOP NAV %>
+<%# ============================================ %>
+<div class="chloe-chat-topnav">
 
-  <div id="messages">
-    <%= render "messages/messages", messages: @chat.messages %>
+  <%# Logo on the left %>
+  <a href="/" class="chloe-topnav-logo">
+    Chloé
+    <span class="chloe-logo-pill">2.0</span>
+  </a>
+
+  <div class="chloe-topnav-divider"></div>
+
+  <%# Current job track in the middle %>
+  <div class="chloe-topnav-track">
+    💼 <%= @job.job_title %>
+    <span class="chloe-track-badge"><%= @job.job_title.downcase.gsub(' ', '_') %></span>
   </div>
 
-  <div id="new_message_container">
-    <%= render "messages/form", job: @job, chat: @chat, message: @message %>
+  <%# Right side: live status + back button %>
+  <div class="chloe-topnav-right">
+    <div class="chloe-status-live">
+      <span class="chloe-live-dot"></span>
+      session active
+    </div>
+    <%= link_to "← All tracks", job_path(@job), class: "chloe-btn-back" %>
+  </div>
+
+</div>
+
+<%# ============================================ %>
+<%# MAIN LAYOUT: sidebar + chat area %>
+<%# ============================================ %>
+<div class="chloe-chat-main">
+
+  <%# ---- SIDEBAR: list of past chats ---- %>
+  <aside class="chloe-chat-sidebar">
+
+    <div class="chloe-sidebar-header">
+      <div class="chloe-sidebar-label">// your sessions</div>
+      <%# Button to create a new chat session %>
+      <%= link_to new_job_chat_path(@job), class: "chloe-btn-new-session", data: { turbo_method: :post } do %>
+        <span class="chloe-plus">+</span>
+        New interview session
+      <% end %>
+    </div>
+
+    <%# List of all chats for this job %>
+    <div class="chloe-sidebar-list">
+      <% current_user.chats.where(job: @job).order(created_at: :desc).each do |chat| %>
+        <%# Active chat gets a special style %>
+        <%= link_to job_chat_path(@job, chat),
+            class: "chloe-chat-item #{'active' if chat.id == @chat.id}" do %>
+          <div class="chloe-chat-item-title"><%= chat.title %></div>
+          <div class="chloe-chat-item-meta">
+            <span><%= @job.job_title.downcase %></span>
+            <span class="chloe-meta-dot"></span>
+            <span><%= time_ago_in_words(chat.created_at) %> ago</span>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+
+    <%# User info at the bottom of sidebar %>
+    <div class="chloe-sidebar-footer">
+      <div class="chloe-user-row">
+        <div class="chloe-user-av">
+          <%# Show first 2 letters of email as avatar %>
+          <%= current_user.email[0..1].upcase %>
+        </div>
+        <div>
+          <div class="chloe-user-name"><%= current_user.email.split('@').first %></div>
+          <div class="chloe-user-batch">batch_2203</div>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+  <%# ---- CHAT AREA ---- %>
+  <div class="chloe-chat-area">
+
+    <%# Challenge bar at the top of chat %>
+    <div class="chloe-challenge-bar">
+      <div>
+        <div class="chloe-challenge-title" id="chat_title"><%= @chat.title %></div>
+        <div class="chloe-challenge-sub">// <%= @job.job_title.downcase.gsub(' ', '_') %> track</div>
+      </div>
+      <div class="chloe-challenge-chips">
+        <span class="chloe-chip"><%= @chat.messages.count %> messages</span>
+      </div>
+    </div>
+
+    <%# Messages zone — Turbo appends new messages here %>
+    <div class="chloe-messages" id="messages">
+      <div class="chloe-system-msg">
+        — Session started · <%= @job.job_title %> track · <%= @chat.created_at.strftime("%b %d, %Y") %> —
+      </div>
+      <%= render "messages/messages", messages: @chat.messages %>
+    </div>
+
+    <%# Input area at the bottom %>
+    <div class="chloe-input-area" id="new_message_container">
+      <%= render "messages/form", job: @job, chat: @chat, message: @message %>
+    </div>
+
   </div>
 </div>
