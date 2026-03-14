@@ -1,1 +1,873 @@
-// Specific CSS for your home-page
+// ============================================
+// CHLOÉ 2.0 — Home Page Styles
+// All classes are prefixed with "chloe-"
+// to avoid conflicts with Bootstrap
+// ============================================
+
+// ── NAV ──────────────────────────────────────
+.chloe-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  height: 60px;
+  background: rgba(250,250,246,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid $border;
+}
+
+.chloe-nav-logo {
+  font-family: $font-display;
+  font-size: 20px;
+  font-weight: 700;
+  color: $ink;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: -0.5px;
+}
+
+.chloe-logo-pill {
+  background: $limon;
+  color: $limon-dk;
+  font-family: $font-mono;
+  font-size: 9px;
+  font-weight: 500;
+  padding: 2px 7px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+.chloe-nav-center {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+
+  a {
+    font-size: 13px;
+    font-weight: 500;
+    color: $ink3;
+    text-decoration: none;
+    transition: color 0.2s;
+    &:hover { color: $ink; }
+  }
+}
+
+.chloe-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chloe-btn-login {
+  font-size: 13px;
+  font-weight: 500;
+  color: $ink2;
+  text-decoration: none;
+  transition: color 0.2s;
+  &:hover { color: $ink; }
+}
+
+.chloe-btn-signup {
+  background: $ink;
+  color: $bg;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 100px;
+  text-decoration: none;
+  transition: background 0.2s;
+  &:hover { background: #333; color: $bg; }
+}
+
+// ── HERO ─────────────────────────────────────
+.chloe-hero {
+  padding: 110px 40px 80px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  background: $bg;
+}
+
+// The green blob in the background
+.chloe-hero-blob {
+  position: absolute;
+  width: 500px;
+  height: 400px;
+  border-radius: 60% 40% 70% 30% / 50% 60% 40% 50%;
+  background: $limon-lt;
+  top: 10%;
+  right: 8%;
+  pointer-events: none;
+  animation: chloe-morph 10s ease-in-out infinite;
+  z-index: 0;
+}
+
+@keyframes chloe-morph {
+  0%,100% { border-radius: 60% 40% 70% 30% / 50% 60% 40% 50%; }
+  33%      { border-radius: 40% 60% 30% 70% / 60% 40% 60% 40%; }
+  66%      { border-radius: 70% 30% 50% 50% / 30% 70% 50% 50%; }
+}
+
+// 2-column grid: text left, chat card right
+.chloe-hero-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 60px;
+  align-items: center;
+}
+
+// The green sticker badge
+.chloe-sticker {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: $limon;
+  color: $limon-dk;
+  font-family: $font-mono;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 6px;
+  margin-bottom: 28px;
+  box-shadow: 3px 3px 0 $limon-dk;
+  animation: chloe-fadeUp 0.5s ease both;
+}
+
+.chloe-sticker-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: $limon-dk;
+  animation: chloe-pulse 2s ease-in-out infinite;
+}
+
+@keyframes chloe-pulse {
+  0%,100% { transform: scale(1); }
+  50%      { transform: scale(1.4); }
+}
+
+.chloe-hero-title {
+  font-family: $font-display;
+  font-size: clamp(44px, 6vw, 80px);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -2px;
+  margin-bottom: 22px;
+  color: $ink;
+  animation: chloe-fadeUp 0.6s 0.05s ease both;
+}
+
+// The yellow underline under "your dream job"
+.chloe-underline-limon {
+  position: relative;
+  display: inline-block;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    bottom: -4px;
+    height: 8px;
+    background: $limon;
+    border-radius: 4px;
+    z-index: -1;
+  }
+}
+
+.chloe-hero-sub {
+  font-size: 17px;
+  color: $ink2;
+  line-height: 1.7;
+  max-width: 460px;
+  margin-bottom: 36px;
+  animation: chloe-fadeUp 0.6s 0.1s ease both;
+}
+
+.chloe-hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 52px;
+  animation: chloe-fadeUp 0.6s 0.15s ease both;
+}
+
+// Big black button with limon shadow
+.chloe-btn-cta {
+  background: $ink;
+  color: $bg;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 14px 28px;
+  border-radius: 100px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 4px 4px 0 $limon;
+
+  &:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 $limon;
+    color: $bg;
+  }
+}
+
+.chloe-btn-watch {
+  font-size: 14px;
+  font-weight: 500;
+  color: $ink2;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  transition: color 0.2s;
+  &:hover { color: $ink; }
+}
+
+.chloe-watch-icon {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid $border;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  background: white;
+}
+
+// Student avatars row
+.chloe-social-proof {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  animation: chloe-fadeUp 0.6s 0.2s ease both;
+}
+
+.chloe-avatars { display: flex; }
+
+// Each avatar is a small colored circle
+.chloe-avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 2px solid $bg;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  color: white;
+  margin-left: -8px; // overlapping effect
+  flex-shrink: 0;
+  font-family: $font-body;
+
+  &:first-child { margin-left: 0; }
+}
+
+.chloe-social-text {
+  font-size: 13px;
+  color: $ink2;
+  font-family: $font-body;
+}
+
+// ── CHAT CARD ────────────────────────────────
+.chloe-chat-wrap {
+  position: relative;
+  animation: chloe-fadeUp 0.7s 0.2s ease both;
+}
+
+// Sticky note decorations
+.chloe-sticky-note {
+  position: absolute;
+  z-index: 10;
+  font-family: $font-mono;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 9px 14px;
+  border-radius: 4px;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+  white-space: nowrap;
+}
+
+.chloe-sticky-1 {
+  background: $limon;
+  color: $limon-dk;
+  top: -16px; right: 20px;
+  transform: rotate(2.5deg);
+}
+
+.chloe-sticky-2 {
+  background: #FFF3B0;
+  color: #7A6000;
+  bottom: -14px; left: 12px;
+  transform: rotate(-1.5deg);
+}
+
+.chloe-card {
+  background: white;
+  border-radius: 20px;
+  border: 1px solid $border;
+  box-shadow: 8px 8px 0 rgba(200,241,53,0.35), 0 20px 60px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+
+.chloe-card-topbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-bottom: 1px solid $border;
+  background: $paper;
+}
+
+.chloe-topbar-dots { display: flex; gap: 5px; }
+
+.chloe-tdot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+}
+
+.chloe-tdot-r { background: #FF6059; }
+.chloe-tdot-y { background: #FFBD2E; }
+.chloe-tdot-g { background: #28CA41; }
+
+.chloe-topbar-title {
+  flex: 1;
+  text-align: center;
+  font-size: 12px;
+  font-family: $font-mono;
+  color: $ink3;
+}
+
+.chloe-topbar-live {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-family: $font-mono;
+  color: #22A56F;
+  font-weight: 500;
+
+  span {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #22A56F;
+    animation: chloe-pulse 1.5s ease-in-out infinite;
+    display: inline-block;
+  }
+}
+
+.chloe-card-header {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 14px 16px;
+  border-bottom: 1px solid $border;
+}
+
+.chloe-avatar-c {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: $limon;
+  display: flex; align-items: center; justify-content: center;
+  font-family: $font-display;
+  font-size: 16px;
+  font-weight: 700;
+  color: $limon-dk;
+  flex-shrink: 0;
+  border: 2px solid $limon-dk;
+}
+
+.chloe-card-name { font-size: 14px; font-weight: 600; color: $ink; }
+.chloe-card-sub  { font-size: 11px; color: $ink3; font-family: $font-mono; }
+
+.chloe-track-chip {
+  margin-left: auto;
+  background: $limon-lt;
+  color: $limon-dk;
+  font-size: 10px;
+  font-family: $font-mono;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(139,175,16,0.3);
+}
+
+.chloe-card-messages {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.chloe-msg { display: flex; flex-direction: column; gap: 4px; }
+
+.chloe-msg-who {
+  font-size: 10px;
+  font-family: $font-mono;
+  color: $ink3;
+
+  &.chloe-right { text-align: right; }
+}
+
+.chloe-bubble {
+  padding: 11px 15px;
+  border-radius: 4px 14px 14px 14px;
+  font-size: 13px;
+  line-height: 1.55;
+  max-width: 90%;
+  font-family: $font-body;
+}
+
+.chloe-bubble-chloe {
+  background: $paper;
+  color: $ink;
+  border: 1px solid $border;
+}
+
+.chloe-bubble-user {
+  background: $ink;
+  color: white;
+  border-radius: 14px 4px 14px 14px;
+  margin-left: auto;
+}
+
+.chloe-bubble-feedback {
+  background: $limon-lt;
+  color: $limon-dk;
+  border: 1px solid rgba(139,175,16,0.3);
+  font-size: 12px;
+}
+
+// The 3 bouncing dots at the bottom of the chat
+.chloe-typing-row {
+  display: flex;
+  gap: 4px;
+  padding: 10px 14px;
+  background: $paper;
+  border: 1px solid $border;
+  border-radius: 4px 12px 12px 12px;
+  width: fit-content;
+
+  span {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: $ink3;
+    animation: chloe-typing 1.2s ease-in-out infinite;
+
+    &:nth-child(2) { animation-delay: 0.15s; }
+    &:nth-child(3) { animation-delay: 0.3s; }
+  }
+}
+
+@keyframes chloe-typing {
+  0%,100% { transform: translateY(0); opacity: 0.3; }
+  50%      { transform: translateY(-4px); opacity: 1; }
+}
+
+.chloe-card-input {
+  margin: 0 14px 14px;
+  border: 1px solid $border;
+  border-radius: 12px;
+  padding: 10px 10px 10px 14px;
+  display: flex; align-items: center; gap: 8px;
+  background: $paper;
+}
+
+.chloe-card-input-text {
+  flex: 1;
+  font-size: 12px;
+  color: $ink3;
+  font-family: $font-body;
+}
+
+.chloe-send-btn {
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  background: $limon;
+  display: flex; align-items: center; justify-content: center;
+  color: $limon-dk;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+// ── SECTIONS COMMONS ─────────────────────────
+.chloe-section {
+  padding: 90px 40px;
+  background: $bg;
+}
+
+.chloe-section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: $font-mono;
+  font-size: 11px;
+  color: $ink3;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+
+.chloe-eyebrow-line {
+  width: 24px; height: 1px;
+  background: $ink3;
+  display: inline-block;
+}
+
+.chloe-section-title {
+  font-family: $font-display;
+  font-size: clamp(30px, 4vw, 50px);
+  font-weight: 700;
+  letter-spacing: -1.5px;
+  line-height: 1.08;
+  max-width: 580px;
+  color: $ink;
+
+  em { font-style: italic; font-weight: 300; color: $ink2; }
+}
+
+// ── HOW IT WORKS ─────────────────────────────
+.chloe-how {
+  background: $paper;
+  border-top: 1px solid $border;
+  border-bottom: 1px solid $border;
+}
+
+.chloe-how-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  margin-top: 56px;
+  border: 1px solid $border;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.chloe-how-card {
+  padding: 36px 32px;
+  background: white;
+  border-right: 1px solid $border;
+  transition: background 0.2s;
+
+  &:last-child { border-right: none; }
+  &:hover { background: $limon-lt; }
+}
+
+.chloe-how-num {
+  font-family: $font-display;
+  font-size: 56px;
+  font-weight: 900;
+  color: rgba(26,26,24,0.06);
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+.chloe-how-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  background: $limon;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  margin-bottom: 18px;
+  box-shadow: 2px 2px 0 $limon-dk;
+}
+
+.chloe-how-title {
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: $ink;
+}
+
+.chloe-how-desc {
+  font-size: 14px;
+  color: $ink2;
+  line-height: 1.6;
+}
+
+// ── ROLES ────────────────────────────────────
+.chloe-roles-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 56px;
+}
+
+.chloe-role-card {
+  background: white;
+  border: 1px solid $border;
+  border-radius: 16px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    border-color: $limon-dk;
+    transform: translateY(-3px);
+    box-shadow: 4px 4px 0 $limon;
+  }
+}
+
+.chloe-role-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chloe-role-emoji-wrap {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: $limon-lt;
+  border: 1px solid rgba(139,175,16,0.25);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.chloe-role-name {
+  font-size: 17px;
+  font-weight: 700;
+  color: $ink;
+  letter-spacing: -0.3px;
+}
+
+.chloe-role-code {
+  font-family: $font-mono;
+  font-size: 11px;
+  color: $ink3;
+  margin-top: 2px;
+}
+
+.chloe-role-desc {
+  font-size: 13px;
+  color: $ink2;
+  line-height: 1.65;
+}
+
+.chloe-role-tags { display: flex; flex-wrap: wrap; gap: 7px; }
+
+.chloe-rtag {
+  font-size: 11px;
+  font-family: $font-mono;
+  padding: 3px 9px;
+  border-radius: 5px;
+  background: $paper;
+  color: $ink2;
+  border: 1px solid $border;
+  transition: all 0.2s;
+}
+
+.chloe-role-card:hover .chloe-rtag {
+  background: $limon-lt;
+  color: $limon-dk;
+  border-color: rgba(139,175,16,0.35);
+}
+
+// ── TESTIMONIALS ─────────────────────────────
+.chloe-testi-section {
+  background: $ink !important;
+  color: white;
+}
+
+.chloe-testi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 56px;
+}
+
+.chloe-testi-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 26px;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+
+  &:hover {
+    background: rgba(200,241,53,0.06);
+    border-color: rgba(200,241,53,0.25);
+    transform: translateY(-3px);
+  }
+}
+
+.chloe-testi-stars {
+  color: $limon;
+  font-size: 13px;
+  letter-spacing: 2px;
+  margin-bottom: 14px;
+}
+
+.chloe-testi-quote {
+  font-size: 14px;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.7;
+  margin-bottom: 20px;
+  font-style: italic;
+  font-family: $font-display;
+  font-weight: 300;
+}
+
+.chloe-testi-author {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chloe-testi-av {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+  color: white;
+}
+
+.chloe-testi-name  { font-size: 13px; font-weight: 600; color: white; }
+.chloe-testi-batch { font-size: 11px; color: rgba(255,255,255,0.4); font-family: $font-mono; }
+
+// ── CTA ──────────────────────────────────────
+.chloe-cta-section {
+  padding: 120px 40px;
+  text-align: center;
+  background: $limon;
+  position: relative;
+  overflow: hidden;
+
+  // Big "Chloé" watermark in the background
+  &::before {
+    content: 'Chloé';
+    position: absolute;
+    font-family: $font-display;
+    font-size: 300px;
+    font-weight: 900;
+    font-style: italic;
+    color: rgba(0,0,0,0.04);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+  }
+}
+
+.chloe-cta-inner { position: relative; z-index: 1; }
+
+.chloe-cta-badge {
+  display: inline-block;
+  background: $ink;
+  color: $limon;
+  font-family: $font-mono;
+  font-size: 11px;
+  padding: 5px 14px;
+  border-radius: 100px;
+  margin-bottom: 28px;
+  letter-spacing: 0.5px;
+}
+
+.chloe-cta-title {
+  font-family: $font-display;
+  font-size: clamp(40px, 6vw, 76px);
+  font-weight: 700;
+  letter-spacing: -2px;
+  line-height: 1.04;
+  color: $ink;
+  max-width: 680px;
+  margin: 0 auto 18px;
+
+  em { font-style: italic; font-weight: 300; }
+}
+
+.chloe-cta-sub {
+  font-size: 17px;
+  color: rgba(26,26,24,0.65);
+  max-width: 440px;
+  margin: 0 auto 44px;
+  line-height: 1.7;
+}
+
+.chloe-btn-cta-dark {
+  background: $ink;
+  color: $limon;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 16px 36px;
+  border-radius: 100px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 4px 4px 0 rgba(0,0,0,0.25);
+
+  &:hover {
+    transform: translate(-2px,-2px);
+    box-shadow: 6px 6px 0 rgba(0,0,0,0.25);
+    color: $limon;
+  }
+}
+
+.chloe-cta-note {
+  margin-top: 24px;
+  font-size: 13px;
+  color: rgba(26,26,24,0.5);
+  font-family: $font-mono;
+}
+
+// ── FOOTER ───────────────────────────────────
+.chloe-footer {
+  background: $ink;
+  padding: 28px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chloe-footer-logo {
+  font-family: $font-display;
+  font-size: 17px;
+  font-weight: 700;
+  color: white;
+  display: flex; align-items: center; gap: 8px;
+}
+
+.chloe-footer-copy {
+  font-size: 12px;
+  color: rgba(255,255,255,0.35);
+  font-family: $font-mono;
+}
+
+// ── ANIMATIONS ───────────────────────────────
+@keyframes chloe-fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// ── RESPONSIVE ───────────────────────────────
+@media (max-width: 900px) {
+  .chloe-nav { padding: 0 20px; }
+  .chloe-nav-center { display: none; }
+  .chloe-hero { padding: 90px 20px 60px; }
+  .chloe-hero-inner { grid-template-columns: 1fr; gap: 48px; }
+  .chloe-hero-blob { display: none; }
+  .chloe-section { padding: 70px 20px; }
+  .chloe-how-grid { grid-template-columns: 1fr; }
+  .chloe-how-card { border-right: none; border-bottom: 1px solid $border; }
+  .chloe-roles-grid { grid-template-columns: 1fr; }
+  .chloe-testi-grid { grid-template-columns: 1fr; }
+  .chloe-cta-section { padding: 80px 20px; }
+  .chloe-footer { padding: 24px 20px; flex-direction: column; gap: 10px; text-align: center; }
+}

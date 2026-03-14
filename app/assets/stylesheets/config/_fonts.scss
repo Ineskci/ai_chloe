@@ -1,8 +1,14 @@
 // Import Google fonts
 @import url('https://fonts.googleapis.com/css?family=Nunito:400,700|Work+Sans:400,700&display=swap');
 
-// Define fonts for body and headers
 // ── Chloé 2.0 ──
 $font-display: 'Fraunces', serif;
 $font-body:    'DM Sans', sans-serif;
 $font-mono:    'DM Mono', monospace;
+
+// Bootstrap requires the variable $body-font to compile.
+// We renamed it to $font-body in our Chloé 2.0 system,
+// so we create aliases here pointing to the same value.
+// Do not remove these — Bootstrap will break without them.
+$body-font:   $font-body;
+$headers-font: $font-display;

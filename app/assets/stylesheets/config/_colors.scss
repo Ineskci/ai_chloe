@@ -1,7 +1,14 @@
-// Define variables for your color scheme
+// ── Bootstrap required variables (do not remove) ──
+// Bootstrap needs these exact names to compile correctly.
+$light-gray: #F8F9FA;
+$gray:       #343A40;
+$blue:       #0D6EFD;
+$green:      #198754;
+$yellow:     #FFC107;
+$red:        #DC3545;
+$orange:     #FD7E14;
 
-// For example:
-// ── Chloé 2.0 ──
+// ── Chloé 2.0 color system ──
 $limon:    #C8F135;
 $limon-dk: #8AAF10;
 $limon-lt: #F0FBB0;
