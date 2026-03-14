@@ -1,0 +1,469 @@
+// ============================================
+// CHLOÉ 2.0 — Chat Page Styles
+// All classes prefixed with "chloe-"
+// to avoid Bootstrap conflicts
+// ============================================
+
+// The chat page takes the full height of the screen
+// and never scrolls — only the messages zone scrolls inside
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+// ── TOP NAV ──────────────────────────────────
+.chloe-chat-topnav {
+  height: 56px;
+  border-bottom: 1px solid $border;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 16px;
+  background: rgba(250,250,246,0.97);
+  backdrop-filter: blur(12px);
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+.chloe-topnav-logo {
+  font-family: $font-display;
+  font-size: 18px;
+  font-weight: 700;
+  color: $ink;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+}
+
+.chloe-topnav-divider {
+  width: 1px;
+  height: 20px;
+  background: $border;
+  flex-shrink: 0;
+}
+
+.chloe-topnav-track {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  color: $ink2;
+}
+
+.chloe-track-badge {
+  background: $limon-lt;
+  color: $limon-dk;
+  font-family: $font-mono;
+  font-size: 10px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  border: 1px solid rgba(139,175,16,0.25);
+  font-weight: 500;
+}
+
+.chloe-topnav-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chloe-status-live {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: #22A56F;
+  font-family: $font-mono;
+  font-weight: 500;
+}
+
+// The green blinking dot
+.chloe-live-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #22A56F;
+  display: inline-block;
+  animation: chloe-blink 1.5s ease-in-out infinite;
+}
+
+@keyframes chloe-blink {
+  0%,100% { opacity: 1; }
+  50%      { opacity: 0.3; }
+}
+
+.chloe-btn-back {
+  font-size: 13px;
+  font-weight: 500;
+  color: $ink2;
+  text-decoration: none;
+  padding: 7px 14px;
+  border: 1px solid $border;
+  border-radius: 100px;
+  transition: border-color 0.2s, color 0.2s;
+
+  &:hover { border-color: $ink2; color: $ink; }
+}
+
+// ── MAIN LAYOUT ──────────────────────────────
+// Side by side: sidebar on left, chat on right
+// calc(100vh - 56px) = full screen minus the top nav
+.chloe-chat-main {
+  display: flex;
+  height: calc(100vh - 56px);
+  overflow: hidden;
+}
+
+// ── SIDEBAR ──────────────────────────────────
+.chloe-chat-sidebar {
+  width: 260px;
+  border-right: 1px solid $border;
+  background: $paper;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.chloe-sidebar-header {
+  padding: 16px 16px 12px;
+  border-bottom: 1px solid $border;
+}
+
+.chloe-sidebar-label {
+  font-family: $font-mono;
+  font-size: 10px;
+  color: $ink3;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+// "New interview session" button
+.chloe-btn-new-session {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 14px;
+  background: $ink;
+  color: white;
+  border-radius: 10px;
+  font-family: $font-body;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 2px 2px 0 $limon;
+
+  &:hover {
+    transform: translate(-1px,-1px);
+    box-shadow: 3px 3px 0 $limon;
+    color: white;
+  }
+}
+
+.chloe-plus {
+  width: 18px; height: 18px;
+  border-radius: 5px;
+  background: $limon;
+  color: $limon-dk;
+  font-size: 14px;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+// Scrollable list of past chats
+.chloe-sidebar-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 8px;
+
+  &::-webkit-scrollbar { width: 4px; }
+  &::-webkit-scrollbar-thumb { background: $border; border-radius: 4px; }
+}
+
+// One chat item in the sidebar
+.chloe-chat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: $ink;
+  margin-bottom: 2px;
+  border: 1.5px solid transparent;
+  transition: background 0.15s;
+
+  &:hover { background: rgba(26,26,24,0.04); color: $ink; }
+
+  // The currently open chat
+  &.active {
+    background: white;
+    border-color: $border;
+    box-shadow: 2px 2px 0 $limon;
+    color: $ink;
+  }
+}
+
+.chloe-chat-item-title {
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chloe-chat-item-meta {
+  font-size: 11px;
+  color: $ink3;
+  font-family: $font-mono;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chloe-meta-dot {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: $ink3;
+  display: inline-block;
+}
+
+// User avatar at the bottom of the sidebar
+.chloe-sidebar-footer {
+  padding: 12px 16px;
+  border-top: 1px solid $border;
+}
+
+.chloe-user-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chloe-user-av {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: $limon;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: $limon-dk;
+  flex-shrink: 0;
+  border: 1.5px solid $limon-dk;
+}
+
+.chloe-user-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: $ink;
+}
+
+.chloe-user-batch {
+  font-size: 10px;
+  color: $ink3;
+  font-family: $font-mono;
+}
+
+// ── CHAT AREA ────────────────────────────────
+.chloe-chat-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: $bg;
+}
+
+// Bar at the top showing the chat title
+.chloe-challenge-bar {
+  padding: 16px 28px;
+  border-bottom: 1px solid $border;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.chloe-challenge-title {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: $ink;
+}
+
+.chloe-challenge-sub {
+  font-size: 12px;
+  color: $ink3;
+  font-family: $font-mono;
+  margin-top: 2px;
+}
+
+.chloe-challenge-chips {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chloe-chip {
+  font-size: 11px;
+  font-family: $font-mono;
+  padding: 5px 11px;
+  border-radius: 20px;
+  border: 1px solid $border;
+  color: $ink3;
+  background: $paper;
+}
+
+// ── MESSAGES ─────────────────────────────────
+// This zone scrolls — the rest of the page stays fixed
+.chloe-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  &::-webkit-scrollbar { width: 4px; }
+  &::-webkit-scrollbar-thumb { background: $border; border-radius: 4px; }
+}
+
+// Small centered text like "Session started..."
+.chloe-system-msg {
+  text-align: center;
+  font-size: 12px;
+  font-family: $font-mono;
+  color: $ink3;
+  padding: 6px 0;
+}
+
+// One message row (Chloé or user)
+.chloe-msg-row {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  // User messages are aligned to the right
+  &.user { align-items: flex-end; }
+}
+
+.chloe-msg-sender {
+  font-size: 11px;
+  font-family: $font-mono;
+  color: $ink3;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+// Chloé's message bubble
+.chloe-bubble {
+  max-width: 72%;
+  padding: 13px 17px;
+  border-radius: 4px 16px 16px 16px;
+  font-size: 14px;
+  line-height: 1.6;
+  font-family: $font-body;
+}
+
+.chloe-bubble-chloe {
+  background: white;
+  border: 1px solid $border;
+  color: $ink;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+// User's message bubble
+.chloe-bubble-user {
+  background: $ink;
+  color: white;
+  border-radius: 16px 4px 16px 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+// ── INPUT AREA ───────────────────────────────
+.chloe-input-area {
+  padding: 16px 28px 20px;
+  border-top: 1px solid $border;
+  background: white;
+  flex-shrink: 0;
+}
+
+// The input wrap — focuses with limon glow
+.chloe-input-wrap {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  background: $paper;
+  border: 1.5px solid $border;
+  border-radius: 14px;
+  padding: 12px 12px 12px 18px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+
+  &:focus-within {
+    border-color: $limon-dk;
+    box-shadow: 0 0 0 3px rgba(200,241,53,0.2);
+  }
+}
+
+// The textarea grows as you type
+.chloe-msg-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-family: $font-body;
+  font-size: 14px;
+  color: $ink;
+  resize: none;
+  outline: none;
+  max-height: 120px;
+  line-height: 1.55;
+  padding: 0;
+
+  &::placeholder { color: $ink3; }
+}
+
+// The send button — black square with limon shadow
+.chloe-send-btn {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: $ink;
+  border: none;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 2px 2px 0 $limon;
+  color: white;
+  font-size: 16px;
+
+  &:hover {
+    transform: translate(-1px,-1px);
+    box-shadow: 3px 3px 0 $limon;
+  }
+}
+
+.chloe-input-hint {
+  text-align: center;
+  font-size: 11px;
+  font-family: $font-mono;
+  color: $ink3;
+  margin-top: 10px;
+}
+
+// ── RESPONSIVE ───────────────────────────────
+@media (max-width: 760px) {
+  .chloe-chat-sidebar { display: none; }
+  .chloe-chat-topnav  { padding: 0 14px; }
+  .chloe-challenge-bar { padding: 12px 16px; }
+  .chloe-messages     { padding: 16px; }
+  .chloe-input-area   { padding: 12px 16px 16px; }
+  .chloe-bubble       { max-width: 90%; }
+}
