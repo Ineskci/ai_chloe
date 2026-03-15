@@ -6,7 +6,7 @@
 
 // The chat page takes the full height of the screen
 // and never scrolls — only the messages zone scrolls inside
-html, body {
+body.chloe-chat-page {
   height: 100%;
   overflow: hidden;
 }

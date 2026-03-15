@@ -1,9 +1,102 @@
-<div class="container my-5">
-  <%= link_to "← #{@job.job_title}", job_path(@job) %>
+<%# Hide Bootstrap sidebar for this page — chat has its own full layout %>
+<% content_for :body_class, "chloe-chat-page" %>
+<% content_for :no_layout, true %>
 
-  <h1>New Interview for <%= @job.job_title %></h1>
+<%# ============================================ %>
+<%# TOP NAV %>
+<%# ============================================ %>
+<div class="chloe-chat-topnav">
 
-  <%= simple_form_for [@job, @chat] do |f| %>
-    <%= f.button :submit, 'Start Interview', class: 'btn btn-primary' %>
-  <% end %>
+  <%# Logo on the left %>
+  <a href="/" class="chloe-topnav-logo">
+    Chloé
+    <span class="chloe-logo-pill">2.0</span>
+  </a>
+
+  <div class="chloe-topnav-divider"></div>
+
+  <%# Current job track in the middle %>
+  <div class="chloe-topnav-track">
+    💼 <%= @job.job_title %>
+    <span class="chloe-track-badge"><%= @job.job_title.downcase.gsub(' ', '_') %></span>
+  </div>
+
+  <%# Right side: back button %>
+  <div class="chloe-topnav-right">
+    <%= link_to "← All tracks", job_path(@job), class: "chloe-btn-back" %>
+  </div>
+
+</div>
+
+<%# ============================================ %>
+<%# MAIN LAYOUT: sidebar + content area %>
+<%# ============================================ %>
+<div class="chloe-chat-main">
+
+  <%# ---- SIDEBAR: list of past chats ---- %>
+  <aside class="chloe-chat-sidebar">
+
+    <div class="chloe-sidebar-header">
+      <div class="chloe-sidebar-label">// your sessions</div>
+      <%# Button to create a new chat session %>
+      <%= link_to new_job_chat_path(@job), class: "chloe-btn-new-session" do %>
+        <span class="chloe-plus">+</span>
+        New interview session
+      <% end %>
+    </div>
+
+    <%# List of all chats for this job %>
+    <div class="chloe-sidebar-list">
+      <% current_user.chats.where(job: @job).order(created_at: :desc).each do |chat| %>
+        <%= link_to job_chat_path(@job, chat), class: "chloe-chat-item" do %>
+          <div class="chloe-chat-item-title"><%= chat.title %></div>
+          <div class="chloe-chat-item-meta">
+            <span><%= @job.job_title.downcase %></span>
+            <span class="chloe-meta-dot"></span>
+            <span><%= time_ago_in_words(chat.created_at) %> ago</span>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+
+    <%# User info at the bottom of sidebar %>
+    <div class="chloe-sidebar-footer">
+      <div class="chloe-user-row">
+        <div class="chloe-user-av">
+          <%= current_user.email[0..1].upcase %>
+        </div>
+        <div>
+          <div class="chloe-user-name"><%= current_user.email.split('@').first %></div>
+          <div class="chloe-user-batch">batch_2203</div>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+  <%# ---- CONTENT AREA ---- %>
+  <div class="chloe-chat-area" style="align-items: center; justify-content: center;">
+
+    <div style="text-align: center; max-width: 420px; padding: 40px;">
+
+      <div style="font-family: var(--font-mono, monospace); font-size: 11px; color: #999; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 16px;">
+        // new session
+      </div>
+
+      <h1 style="font-family: 'Fraunces', serif; font-size: 28px; font-weight: 700; margin-bottom: 8px;">
+        <%= @job.job_title %>
+      </h1>
+
+      <p style="font-size: 14px; color: #666; margin-bottom: 32px;">
+        Start a new AI interview session for this track.
+      </p>
+
+      <%= simple_form_for [@job, @chat] do |f| %>
+        <%= f.button :submit, 'Start Interview', class: "chloe-btn-new-session", style: "border: none; cursor: pointer; font-size: 15px; padding: 14px 28px; justify-content: center;" %>
+      <% end %>
+
+    </div>
+
+  </div>
+
 </div>

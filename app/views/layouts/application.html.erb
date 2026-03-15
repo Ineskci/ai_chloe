@@ -25,7 +25,7 @@
 
   </head>
 
-<body>
+<body class="<%= content_for(:body_class) %>">
   <%= link_to "Skip to main content", "#main-content", class: "visually-hidden-focusable" %>
 
   <% if content_for?(:no_layout) %>
