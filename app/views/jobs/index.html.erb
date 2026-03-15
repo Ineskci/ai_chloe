@@ -1,7 +1,53 @@
-<h1>Jobs</h1>
+<% content_for :no_layout, true %>
 
-<ul>
-  <% @jobs.each do |job| %>
-    <li><%= link_to job.job_title, job_path(job) %></li>
-  <% end %>
-</ul>
+<div class="chloe-jobs-page">
+<nav class="chloe-nav">
+  <a href="/" class="chloe-nav-logo">Chloé <span class="chloe-nav-badge">2.0</span></a>
+  <div class="chloe-nav-actions">
+    <% if user_signed_in? %>
+      <%= link_to "Log out", destroy_user_session_path, data: { turbo_method: :delete }, class: "chloe-btn-ghost" %>
+    <% else %>
+      <%= link_to "Log in", new_user_session_path, class: "chloe-btn-ghost" %>
+      <%= link_to "Sign up", new_user_registration_path, class: "chloe-btn-primary" %>
+    <% end %>
+  </div>
+</nav>
+  <!-- HEADER -->
+  <div class="chloe-jobs-header">
+    <span class="chloe-jobs-badge">→ Choose your interview track</span>
+    <h1>What job are you<br><em>practicing for?</em></h1>
+    <p>Pick the role you're targeting. Chloé will tailor every question to your track, your level, and the Le Wagon curriculum.</p>
+  </div>
+
+  <!-- GRID -->
+  <div class="chloe-jobs-grid">
+    <% levels = ["Beginner friendly", "Intermediate", "Intermediate", "Advanced"] %>
+    <% @jobs.each_with_index do |job, index| %>
+      <div class="chloe-job-card">
+        <div class="chloe-job-card-top">
+          <div class="chloe-job-icon">
+            <%= job.job_title.include?("Dev") ? "💻" :
+                job.job_title.include?("Product") ? "📋" :
+                job.job_title.include?("UX") ? "🎨" :
+                job.job_title.include?("Data") ? "📊" : "💼" %>
+          </div>
+          <span class="chloe-job-level"><%= levels[index] || "Intermediate" %></span>
+        </div>
+
+        <h2 class="chloe-job-title"><%= job.job_title %></h2>
+        <p class="chloe-job-track">track: "<%= job.job_title.downcase.gsub(" ", "_") %>"</p>
+        <p class="chloe-job-desc"><%= job.job_description %></p>
+
+        <div class="chloe-job-tags">
+          <span class="chloe-tag">Interview prep</span>
+          <span class="chloe-tag">AI feedback</span>
+        </div>
+
+        <div class="chloe-job-footer">
+          <span class="chloe-job-count">● 12 interview types</span>
+          <%= link_to "Start practicing →", new_job_chat_path(job), class: "chloe-job-cta" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

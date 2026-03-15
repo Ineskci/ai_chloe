@@ -1,0 +1,322 @@
+.chloe-auth {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  font-family: $font-display;
+  overflow: hidden;
+}
+
+// LEFT PANEL
+.chloe-auth-left {
+  width: 45%;
+  min-width: 45%;
+  flex-shrink: 0;
+  background-color: $limon;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 3rem;
+  border-right: 2px solid $ink;
+  overflow: hidden;
+}
+
+.chloe-auth-badge {
+  display: inline-block;
+  background-color: $ink;
+  color: $limon;
+  font-family: $font-mono;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.3rem 0.75rem;
+  border-radius: 50px;
+  margin-bottom: 1.25rem;
+}
+
+.chloe-auth-headline {
+  font-size: 3rem;
+  font-weight: 900;
+  color: $ink;
+  line-height: 1.1;
+  margin: 0;
+
+  em {
+    font-style: italic;
+  }
+}
+
+.chloe-auth-sub {
+  font-size: 0.9rem;
+  color: $ink;
+  opacity: 0.75;
+  line-height: 1.6;
+  max-width: 340px;
+  margin-top: 1rem;
+}
+
+.chloe-auth-quote {
+  background-color: white;
+  border: 2px solid $ink;
+  padding: 1.5rem;
+  max-width: 340px;
+  box-shadow: 4px 4px 0 $ink;
+
+  p {
+    font-family: $font-mono;
+    font-size: 0.85rem;
+    color: $ink;
+    font-style: italic;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+}
+
+.chloe-auth-quote-author {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  strong {
+    display: block;
+    font-family: $font-display;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  span {
+    font-family: $font-mono;
+    font-size: 0.7rem;
+    opacity: 0.6;
+  }
+}
+
+.chloe-auth-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #8b7cf6;
+  color: white;
+  font-family: $font-mono;
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+// RIGHT PANEL
+.chloe-auth-right {
+  width: 55%;
+  flex: 1;
+  background-color: $paper;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  overflow-y: auto;
+  position: relative;
+}
+
+.chloe-auth-back {
+  position: absolute;
+  top: 1.5rem;
+  right: 2rem;
+  font-family: $font-mono;
+  font-size: 0.8rem;
+  color: lighten($ink, 35%);
+  text-decoration: none;
+
+  &:hover { color: $ink; }
+}
+
+.chloe-auth-form-wrapper {
+  width: 100%;
+  max-width: 400px;
+}
+
+// TABS
+.chloe-auth-tabs {
+  display: flex;
+  border: 1.5px solid lighten($ink, 60%);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.chloe-auth-tab {
+  flex: 1;
+  text-align: center;
+  padding: 0.6rem;
+  font-family: $font-mono;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: lighten($ink, 40%);
+  text-decoration: none;
+  background: transparent;
+  transition: all 0.15s ease;
+
+  &.active {
+    background-color: $ink;
+    color: $paper;
+  }
+
+  &:hover:not(.active) {
+    background-color: lighten($ink, 72%);
+    color: $ink;
+  }
+}
+
+.chloe-auth-title {
+  font-family: $font-display;
+  font-size: 2rem;
+  font-weight: 900;
+  color: $ink;
+  margin-bottom: 0.5rem;
+}
+
+.chloe-auth-subtitle {
+  font-family: $font-mono;
+  font-size: 0.8rem;
+  color: lighten($ink, 30%);
+  margin-bottom: 1.75rem;
+
+  a {
+    color: lighten($ink, 35%);
+    text-decoration: none;
+    font-weight: 700;
+    &:hover { text-decoration: underline; }
+  }
+}
+
+// INPUTS
+.chloe-form-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  .input {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  label {
+    font-family: $font-mono;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: $ink;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  input[type="email"],
+  input[type="password"],
+  input[type="text"] {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid $ink;
+    border-radius: 4px;
+    font-family: $font-mono;
+    font-size: 0.9rem;
+    background-color: white;
+    color: $ink;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:focus {
+      border-color: $limon;
+      box-shadow: 3px 3px 0 $limon;
+    }
+  }
+
+  .hint {
+    font-family: $font-mono;
+    font-size: 0.75rem;
+    color: $ink;
+    opacity: 0.55;
+  }
+
+  .boolean {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+
+    label {
+      text-transform: none;
+      font-size: 0.85rem;
+      letter-spacing: 0;
+    }
+  }
+}
+
+// FORGOT
+.chloe-forgot {
+  text-align: right;
+  margin-top: 0.5rem;
+
+  a {
+    font-family: $font-mono;
+    font-size: 0.78rem;
+    color: lighten($ink, 35%);
+    text-decoration: none;
+    &:hover { text-decoration: underline; }
+  }
+}
+
+.chloe-form-actions {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+// BOTÕES
+.chloe-btn-primary {
+  display: inline-block;
+  width: 100%;
+  background-color: $ink;
+  color: $paper !important;
+  font-family: $font-mono;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0.875rem;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none !important;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    background-color: $limon;
+    color: $ink !important;
+    opacity: 1;
+  }
+}
+
+.chloe-btn-full {
+  width: 100%;
+}
+
+// LINKS
+.chloe-auth-links {
+  font-family: $font-mono;
+  font-size: 0.85rem;
+  text-align: center;
+
+  a {
+    color: $ink;
+    text-decoration: underline;
+    display: block;
+    margin-bottom: 0.4rem;
+
+    &:hover { opacity: 0.6; }
+  }
+}
+
+// FOOTER
+.chloe-auth-footer {
+  text-align: center;
+  font-family: $font-mono;
+  font-size: 0.75rem;
+  color: lighten($ink, 45%);
+  margin-top: 1.5rem;
+}

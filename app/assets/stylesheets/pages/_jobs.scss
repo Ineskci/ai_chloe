@@ -1,0 +1,239 @@
+.chloe-jobs-page {
+  min-height: 100vh;
+  background: $paper;
+  font-family: $font-display;
+}
+
+.chloe-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+}
+
+.chloe-nav-logo {
+  font-family: $font-display;
+  font-weight: 900;
+  font-size: 1.1rem;
+  color: $ink;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.chloe-nav-badge {
+  background-color: #ccff00;
+  color:  #999999;
+  font-family: $font-mono;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+}
+
+.chloe-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+// HEADER
+.chloe-jobs-header {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 6rem 2rem 2.5rem;
+
+  h1 {
+    font-size: 3rem;
+    color: $ink;
+    font-weight: 900;
+    margin: 0.75rem 0 1rem;
+    line-height: 1.1;
+
+    em {
+      font-style: italic;
+      font-weight: 900;
+      color: #999999; 
+    }
+  }
+
+  p {
+    color: lighten($ink, 30%);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    max-width: 500px;
+  }
+}
+
+.chloe-jobs-badge {
+  display: inline-block;
+  background-color: $limon;
+  color: $ink;
+  font-family: $font-mono;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.3rem 0.8rem;
+  border-radius: 50px;
+}
+
+// GRID
+.chloe-jobs-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 2rem 4rem;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// CARD
+.chloe-job-card {
+  background: white;
+  border: 1.5px solid lighten($ink, 60%);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 3px 3px 0 $limon;
+  }
+}
+
+.chloe-job-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.chloe-job-icon {
+  font-size: 2rem;
+  background: $paper;
+  padding: 0.4rem;
+  border-radius: 8px;
+}
+
+.chloe-job-level {
+  font-family: $font-mono;
+  font-size: 0.7rem;
+  color: $ink;
+  background: lighten($ink, 70%);
+  padding: 0.25rem 0.6rem;
+  border-radius: 50px;
+}
+
+.chloe-job-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: $ink;
+  margin: 0;
+}
+
+.chloe-job-track {
+  font-family: $font-mono;
+  font-size: 0.75rem;
+  color: lighten($ink, 40%);
+  margin: 0;
+}
+
+.chloe-job-desc {
+  color: lighten($ink, 20%);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.chloe-job-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.chloe-tag {
+  font-family: $font-mono;
+  font-size: 0.7rem;
+  padding: 3px 10px;
+  border-radius: 50px;
+  background: lighten($ink, 72%);
+  color: $ink;
+}
+
+.chloe-job-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+}
+
+.chloe-job-count {
+  font-family: $font-mono;
+  font-size: 0.75rem;
+  color: $limon;
+}
+
+.chloe-job-cta {
+  display: inline-block;
+  background-color: $ink;
+  color: $paper !important;
+  font-family: $font-mono;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.45rem 1rem;
+  border-radius: 50px;
+  text-decoration: none !important;
+  transition: background-color 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    background-color: $limon;
+    color: $ink !important;
+  }
+}
+
+// BOTÕES NAV
+.chloe-btn-primary {
+  display: inline-block;
+  background-color: $ink;
+  color: $paper !important;
+  font-family: $font-mono;
+  font-size: 0.875rem;
+  font-weight: 700;
+  padding: 0.5rem 1.2rem;
+  border: 2px solid $ink;
+  border-radius: 50px;
+  text-decoration: none !important;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+
+  &:hover {
+    opacity: 0.8;
+    color: $paper !important;
+  }
+}
+
+.chloe-btn-ghost {
+  display: inline-block;
+  background-color: transparent;
+  color: lighten($ink, 40%) !important;
+  font-family: $font-mono;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.5rem 1.2rem;
+  border: 1.5px solid lighten($ink, 60%);
+  border-radius: 50px;
+  text-decoration: none !important;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    border-color: $ink;
+    color: $ink !important;
+  }
+}

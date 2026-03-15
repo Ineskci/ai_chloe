@@ -1,33 +1,63 @@
-<h2>Sign up</h2>
+<% content_for :no_layout, true %>
 
-<%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= f.error_notification %>
+<div class="chloe-auth">
+  <!-- LEFT PANEL -->
+  <div class="chloe-auth-left">
+    <a href="/" class="chloe-nav-logo">Chloé <span class="chloe-nav-badge">2.0</span></a>
 
-  <div class="form-inputs">
-    <%= f.input :first_name,
-                required: true,
-                autofocus: true,
-                input_html: { autocomplete: "first_name" } %>
-    <%= f.input :last_name,
-                required: true,
-                autofocus: true,
-                input_html: { autocomplete: "last_name" } %>
-    <%= f.input :email,
-                required: true,
-                autofocus: true,
-                input_html: { autocomplete: "email" } %>
-    <%= f.input :password,
-                required: true,
-                hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length),
-                input_html: { autocomplete: "new-password" } %>
-    <%= f.input :password_confirmation,
-                required: true,
-                input_html: { autocomplete: "new-password" } %>
+    <div>
+      <span class="chloe-auth-badge">● AI Interview Coach</span>
+      <h1 class="chloe-auth-headline">Practice today.<br><em>Land the job</em><br>tomorrow.</h1>
+      <p class="chloe-auth-sub">Chloé simulates real tech interviews, gives you honest feedback, and gets you job-ready — before the real thing.</p>
+    </div>
+
+    <div class="chloe-auth-quote">
+      <p>"I did 3 sessions the night before. The feedback was so precise — I got the offer the next day."</p>
+      <div class="chloe-auth-quote-author">
+        <div class="chloe-auth-avatar">AM</div>
+        <div>
+          <strong>Ana M.</strong>
+          <span>batch_2187 · Junior Dev</span>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="form-actions">
-    <%= f.button :submit, "Sign up" %>
-  </div>
-<% end %>
+  <!-- RIGHT PANEL -->
+  <div class="chloe-auth-right">
+    <a href="/" class="chloe-auth-back">← Back to home</a>
 
-<%= render "devise/shared/links" %>
+    <div class="chloe-auth-form-wrapper">
+      <div class="chloe-auth-tabs">
+        <a href="<%= new_user_session_path %>" class="chloe-auth-tab">Log in</a>
+        <a href="<%= new_user_registration_path %>" class="chloe-auth-tab active">Sign up</a>
+      </div>
+
+      <h2 class="chloe-auth-title">Create your account ✦</h2>
+      <p class="chloe-auth-subtitle">Already have one? <a href="<%= new_user_session_path %>">Log in</a></p>
+
+      <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+        <%= f.error_notification %>
+        <div class="chloe-form-inputs">
+          <%= f.input :first_name, required: true, autofocus: true,
+                      input_html: { autocomplete: "first_name" } %>
+          <%= f.input :last_name, required: true,
+                      input_html: { autocomplete: "last_name" } %>
+          <%= f.input :email, required: true,
+                      input_html: { autocomplete: "email" } %>
+          <%= f.input :password, required: true,
+                      hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length),
+                      input_html: { autocomplete: "new-password" } %>
+          <%= f.input :password_confirmation, required: true,
+                      input_html: { autocomplete: "new-password" } %>
+        </div>
+
+        <div class="chloe-form-actions">
+          <%= f.button :submit, "Create account →", class: "chloe-btn-primary chloe-btn-full" %>
+        </div>
+      <% end %>
+
+      <p class="chloe-auth-footer">🎓 Le Wagon SP · Batch #2203</p>
+    </div>
+  </div>
+</div>
