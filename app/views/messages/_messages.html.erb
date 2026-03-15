@@ -1,15 +1,28 @@
+<%# Loop over messages and display each one %>
 <% messages.each do |message| %>
+
   <% if message.role == "user" %>
-    <div class="d-flex justify-content-end mb-2">
-      <div class="bg-white px-3 pb-0 pt-3 rounded-pill">
+    <%# User message — aligned to the RIGHT %>
+    <div class="chloe-msg-row user">
+      <div class="chloe-msg-sender" style="justify-content: flex-end;">
+        You
+      </div>
+      <div class="chloe-bubble chloe-bubble-user">
         <%= simple_format(message.content) %>
       </div>
     </div>
+
   <% elsif message.role == "assistant" %>
-    <div class="d-flex justify-content-start mb-5">
-      <div class="px-3 pb-0 pt-3">
+    <%# Chloé's message — aligned to the LEFT %>
+    <div class="chloe-msg-row">
+      <div class="chloe-msg-sender">
+        Chloé 2.0
+      </div>
+      <div class="chloe-bubble chloe-bubble-chloe">
         <%= simple_format(message.content) %>
       </div>
     </div>
+
   <% end %>
+
 <% end %>
