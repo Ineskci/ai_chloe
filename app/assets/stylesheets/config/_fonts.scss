@@ -10,9 +10,5 @@ $font-mono:    'DM Mono', monospace;
 // We renamed it to $font-body in our Chloé 2.0 system,
 // so we create aliases here pointing to the same value.
 // Do not remove these — Bootstrap will break without them.
-<<<<<<< HEAD
-$body-font:   $font-body;
-=======
-$body-font:    $font-body;
->>>>>>> feat/chat-page
+$body-font: $font-body;
 $headers-font: $font-display;

@@ -28,17 +28,6 @@
 <body>
   <%= link_to "Skip to main content", "#main-content", class: "visually-hidden-focusable" %>
 
-<<<<<<< HEAD
-  <% unless content_for?(:no_layout) %>
-    <header>
-      <%= render "shared/navbar" %>
-    </header>
-  <% end %>
-
-  <% if content_for?(:no_layout) %>
-    <%= yield %>
-  <% else %>
-=======
   <% if content_for?(:no_layout) %>
     <%# Home, chat, jobs pages — no Bootstrap navbar or sidebar %>
     <%= yield %>
@@ -47,7 +36,6 @@
     <header>
       <%= render "shared/navbar" %>
     </header>
->>>>>>> feat/chat-page
     <div class="container-fluid">
       <div class="row" data-controller="toggle">
         <nav class="col-md-2 sidebar pt-3" data-toggle-target="hideable">
