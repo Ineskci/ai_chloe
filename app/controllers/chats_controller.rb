@@ -12,6 +12,14 @@ class ChatsController < ApplicationController
     @chat.user = current_user
 
     if @chat.save
+      first_name = current_user.first_name.presence || current_user.email
+
+      # Primeira caixa — saudação (texto fixo)
+      @chat.messages.create(role: "assistant", content: "Olá, #{first_name}! 👋 Eu sou a Chloé 2.0, sua coach de entrevistas! Pronto para treinar sua entrevista de #{@job.job_title}?")
+
+      # Segunda caixa — quebra-gelo (texto fixo)
+      @chat.messages.create(role: "assistant", content: "Escolha como está se sentindo:\nA) Super confiante 💪\nB) Um pouco nervoso 😅\nC) Pronto para começar! 🚀")
+
       redirect_to job_chat_path(@job, @chat)
     else
       @chats = @job.chats.where(user_id: current_user.id)
@@ -21,8 +29,14 @@ class ChatsController < ApplicationController
 
   def show
     @job = Job.find(params[:job_id])
-    @chat    = current_user.chats.find(params[:id])
+    @chat = current_user.chats.find(params[:id])
     @message = Message.new
     @messages = @chat.messages
+  end
+
+  private
+
+  def job_context
+    "O candidato está se preparando para a vaga de: #{@job.job_title}. #{@job.job_description}"
   end
 end
