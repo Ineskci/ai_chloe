@@ -34,6 +34,9 @@ class MessagesController < ApplicationController
     - Pergunta comportamental: enunciado simples e direto
   PROMPT
 
+  TECHNICAL_TOPICS = ["Ruby on Rails", "JavaScript", "SQL", "HTML", "CSS"].freeze
+  QUESTION_FORMAT = "Formato obrigatório:\n\n[enunciado da pergunta]\nA) [opção]\nB) [opção]\nC) [opção]"
+
   def create
     @job = Job.find(params[:job_id])
     @chat = current_user.chats.find(params[:chat_id])
@@ -41,58 +44,10 @@ class MessagesController < ApplicationController
 
     if @message.save
       @ruby_llm_chat = RubyLLM.chat(model: "gpt-4o-mini")
-      user_count = @chat.messages.where(role: "user").count
-      build_conversation_history unless user_count == 1
+      @user_count = @chat.messages.where(role: "user").count
+      build_conversation_history unless @user_count == 1
 
-      if user_count == 1
-        # Quebra-gelo → resposta calorosa (sem histórico)
-        response = @ruby_llm_chat.with_instructions(instructions).ask(@message.content)
-        @chat.messages.create(role: "assistant", content: response.content)
-
-        # Primeira pergunta técnica (nova instância sem histórico)
-        fresh_chat = RubyLLM.chat(model: "gpt-4o-mini")
-        first_question = fresh_chat.with_instructions(instructions).ask("Agora faça a primeira pergunta técnica sobre Ruby on Rails. Formato obrigatório:\n\n[enunciado da pergunta]\nA) [opção]\nB) [opção]\nC) [opção]")
-        @chat.messages.create(role: "assistant", content: first_question.content)
-
-      elsif user_count.between?(2, 5)
-        # Feedback da resposta técnica
-        feedback = @ruby_llm_chat.with_instructions(instructions).ask("A resposta do candidato foi '#{@message.content}'. Esta resposta está correta ou incorreta? Responda apenas com 'Correto! ✅' ou 'Incorreto! ❌ A resposta correta é [X] porque [breve explicação]'")
-        @chat.messages.create(role: "assistant", content: feedback.content)
-
-        # Próxima pergunta técnica
-        next_question = @ruby_llm_chat.with_instructions(instructions).ask("Agora faça a próxima pergunta técnica. Formato obrigatório:\n\n[enunciado da pergunta]\nA) [opção]\nB) [opção]\nC) [opção]")
-        @chat.messages.create(role: "assistant", content: next_question.content)
-
-      elsif user_count == 6
-        # Feedback da última resposta técnica
-        feedback = @ruby_llm_chat.with_instructions(instructions).ask("A resposta do candidato foi '#{@message.content}'. Esta resposta está correta ou incorreta? Responda apenas com 'Correto! ✅' ou 'Incorreto! ❌ A resposta correta é [X] porque [breve explicação]'")
-        @chat.messages.create(role: "assistant", content: feedback.content)
-
-        # Primeira pergunta comportamental
-        next_question = @ruby_llm_chat.with_instructions(instructions).ask("Agora faça a primeira pergunta comportamental relacionada com a vaga. Formato obrigatório:\n\n[enunciado da pergunta]\nA) [opção]\nB) [opção]\nC) [opção]")
-        @chat.messages.create(role: "assistant", content: next_question.content)
-
-      elsif user_count.between?(7, 8)
-        # Feedback comportamental — caloroso, sem certo/errado
-        feedback = @ruby_llm_chat.with_instructions(instructions).ask("O candidato respondeu '#{@message.content}'. Dê um feedback curto, caloroso e encorajador. Máximo 2 linhas.")
-        @chat.messages.create(role: "assistant", content: feedback.content)
-
-        # Próxima pergunta comportamental
-        next_question = @ruby_llm_chat.with_instructions(instructions).ask("Agora faça a próxima pergunta comportamental relacionada com a vaga. Formato obrigatório:\n\n[enunciado da pergunta]\nA) [opção]\nB) [opção]\nC) [opção]")
-        @chat.messages.create(role: "assistant", content: next_question.content)
-
-      elsif user_count == 9
-        # Feedback da última pergunta comportamental
-        feedback = @ruby_llm_chat.with_instructions(instructions).ask("O candidato respondeu '#{@message.content}'. Dê um feedback curto, caloroso e encorajador. Máximo 2 linhas.")
-        @chat.messages.create(role: "assistant", content: feedback.content)
-
-        # Mensagem de fim de entrevista
-        @chat.messages.create(role: "assistant", content: "A entrevista terminou! 🎉")
-
-        # Feedback geral
-        final_feedback = @ruby_llm_chat.with_instructions(instructions).ask("Com base em todas as respostas do candidato às 5 perguntas técnicas e 3 perguntas comportamentais, dê um feedback geral caloroso e encorajador. Destaca os pontos fortes e uma sugestão de melhoria. Máximo 4 linhas.")
-        @chat.messages.create(role: "assistant", content: final_feedback.content)
-      end
+      process_response
 
       @chat.generate_title_from_first_message
 
@@ -109,6 +64,63 @@ class MessagesController < ApplicationController
   end
 
   private
+
+  def process_response
+    case @user_count
+    when 1 then handle_icebreaker
+    when 2..5 then handle_technical_question
+    when 6 then handle_last_technical_question
+    when 7..8 then handle_behavioral_question
+    when 9 then handle_last_behavioral_question
+    end
+  end
+
+  def handle_icebreaker
+    save_assistant_message ask(@message.content)
+    save_assistant_message ask_fresh("Agora faça a primeira pergunta técnica sobre #{TECHNICAL_TOPICS.first}. #{QUESTION_FORMAT}")
+  end
+
+  def handle_technical_question
+    save_assistant_message ask_feedback_technical
+    save_assistant_message ask("Agora faça a próxima pergunta técnica. #{QUESTION_FORMAT}")
+  end
+
+  def handle_last_technical_question
+    save_assistant_message ask_feedback_technical
+    save_assistant_message ask("Agora faça a primeira pergunta comportamental relacionada com a vaga. #{QUESTION_FORMAT}")
+  end
+
+  def handle_behavioral_question
+    save_assistant_message ask_feedback_behavioral
+    save_assistant_message ask("Agora faça a próxima pergunta comportamental relacionada com a vaga. #{QUESTION_FORMAT}")
+  end
+
+  def handle_last_behavioral_question
+    save_assistant_message ask_feedback_behavioral
+    save_assistant_message "A entrevista terminou! 🎉"
+    save_assistant_message ask("Com base em todas as respostas do candidato às 5 perguntas técnicas e 3 perguntas comportamentais, dê um feedback geral caloroso e encorajador. Destaca os pontos fortes e uma sugestão de melhoria. Máximo 4 linhas.")
+    @messages_created = 3
+  end
+
+  def ask(prompt)
+    @ruby_llm_chat.with_instructions(instructions).ask(prompt).content
+  end
+
+  def ask_fresh(prompt)
+    RubyLLM.chat(model: "gpt-4o-mini").with_instructions(instructions).ask(prompt).content
+  end
+
+  def ask_feedback_technical
+    ask("A resposta do candidato foi '#{@message.content}'. Esta resposta está correta ou incorreta? Responda apenas com 'Correto! ✅' ou 'Incorreto! ❌ A resposta correta é [X] porque [breve explicação]'")
+  end
+
+  def ask_feedback_behavioral
+    ask("O candidato respondeu '#{@message.content}'. Dê um feedback curto, caloroso e encorajador. Máximo 2 linhas.")
+  end
+
+  def save_assistant_message(content)
+    @chat.messages.create(role: "assistant", content: content)
+  end
 
   def job_context
     "A vaga para a qual o candidato está se preparando é: #{@job.job_title}. #{@job.job_description}
