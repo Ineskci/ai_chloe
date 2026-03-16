@@ -25,7 +25,7 @@
     <div class="chloe-hero-left">
       <div class="chloe-sticker">
         <span class="chloe-sticker-dot"></span>
-        Le Wagon SP · Batch #2203
+        Beyond Le Wagon
       </div>
 
       <h1 class="chloe-hero-title">
@@ -35,7 +35,7 @@
       </h1>
 
       <p class="chloe-hero-sub">
-        Chloé 2.0 simulates real interviews, gives you honest feedback, and turns bootcamp grads into <strong>confident candidates</strong> — before the real thing.
+        Chloé 2.0 simulates real interviews, gives you honest feedback, and turns bootcamp grads into <strong>confident candidates</strong> before the real thing.
       </p>
 
       <div class="chloe-hero-actions">
@@ -64,7 +64,7 @@
 
     <!-- Chat Card -->
     <div class="chloe-chat-wrap">
-      <div class="chloe-sticky-note chloe-sticky-1">💡 Junior Dev track</div>
+      <div class="chloe-sticky-note chloe-sticky-1">💡 Junior Dev </div>
       <div class="chloe-sticky-note chloe-sticky-2">Score: 8.5 / 10 🎯</div>
       <div class="chloe-card">
         <div class="chloe-card-topbar">
@@ -73,30 +73,29 @@
             <div class="chloe-tdot chloe-tdot-y"></div>
             <div class="chloe-tdot chloe-tdot-g"></div>
           </div>
-          <div class="chloe-topbar-title">chloe_2.0 — interview_session</div>
+          <div class="chloe-topbar-title">chloe_2.0 </div>
           <div class="chloe-topbar-live"><span></span>live</div>
         </div>
         <div class="chloe-card-header">
           <div class="chloe-avatar-c">C</div>
           <div>
             <div class="chloe-card-name">Chloé 2.0</div>
-            <div class="chloe-card-sub">your_interview_coach.rb</div>
           </div>
           <div class="chloe-track-chip">junior dev</div>
         </div>
         <div class="chloe-card-messages">
           <div class="chloe-msg">
             <div class="chloe-msg-who">Chloé</div>
-            <div class="chloe-bubble chloe-bubble-chloe">Tell me about a time you had to debug something really tricky.</div>
+            <div class="chloe-bubble chloe-bubble-chloe">Tell me about a time you had to solve a tough technical problem. What did you do?</div>
           </div>
           <div class="chloe-msg">
             <div class="chloe-msg-who chloe-right">You</div>
-            <div class="chloe-bubble chloe-bubble-user">I had an N+1 query in Rails — found it with the Bullet gem...</div>
+            <div class="chloe-bubble chloe-bubble-user">I found an N+1 query in Rails, used the Bullet gem to detect it and fixed it with eager loading.</div>
           </div>
           <div class="chloe-msg">
             <div class="chloe-msg-who">Chloé</div>
             <div class="chloe-bubble chloe-bubble-feedback">
-              ✦ Great STAR structure! One push — how did you <em>verify</em> the fix worked?
+              Great STAR structure! Now go deeper, how did you verify the fix was actually working?
             </div>
           </div>
           <div class="chloe-typing-row"><span></span><span></span><span></span></div>
@@ -119,7 +118,7 @@
       <div class="chloe-how-num">01</div>
       <div class="chloe-how-icon">🎯</div>
       <div class="chloe-how-title">Pick your track</div>
-      <div class="chloe-how-desc">Choose your target role — Junior Dev, PM, UX, or Data Analyst. Chloé tailors every question to your exact path.</div>
+      <div class="chloe-how-desc">Choose your target role: Junior Dev, PM, UX, or Data Analyst. Chloé tailors every question to your exact path.</div>
     </div>
     <div class="chloe-how-card">
       <div class="chloe-how-num">02</div>
@@ -142,17 +141,16 @@
   <h2 class="chloe-section-title">Four paths.<br><em>One coach.</em></h2>
   <div class="chloe-roles-grid">
     <% [
-      { emoji: "💻", name: "Junior Developer", code: "junior_dev", desc: "Rails & Ruby deep-dives, live coding, culture fit prep.", tags: ["Ruby on Rails", "JavaScript", "SQL", "Git"] },
-      { emoji: "🗂️", name: "Product Manager", code: "product_manager", desc: "Prioritization frameworks and stakeholder scenarios.", tags: ["Strategy", "User stories", "Metrics"] },
-      { emoji: "🎨", name: "UX Designer", code: "ux_designer", desc: "Walk through your design process and portfolio.", tags: ["Design process", "Figma", "Research"] },
-      { emoji: "📊", name: "Data Analyst", code: "data_analyst", desc: "SQL challenges and data storytelling.", tags: ["SQL", "Python", "Business cases"] }
+      { emoji: "💻", name: "Junior Developer", desc: "Rails & Ruby deep-dives, live coding, culture fit prep.", tags: ["Ruby on Rails", "JavaScript", "SQL", "Git"] },
+      { emoji: "🗂️", name: "Product Manager", desc: "Prioritization frameworks and stakeholder scenarios.", tags: ["Strategy", "User stories", "Metrics"] },
+      { emoji: "🎨", name: "UX Designer", desc: "Walk through your design process and portfolio.", tags: ["Design process", "Figma", "Research"] },
+      { emoji: "📊", name: "Data Analyst", desc: "SQL challenges and data storytelling.", tags: ["SQL", "Python", "Business cases"] }
     ].each do |role| %>
       <div class="chloe-role-card">
         <div class="chloe-role-top">
           <div class="chloe-role-emoji-wrap"><%= role[:emoji] %></div>
           <div>
             <div class="chloe-role-name"><%= role[:name] %></div>
-            <div class="chloe-role-code">track: "<%= role[:code] %>"</div>
           </div>
         </div>
         <div class="chloe-role-desc"><%= role[:desc] %></div>
@@ -172,9 +170,9 @@
   <h2 class="chloe-section-title" style="color:white;">They practiced.<br><em>They got hired.</em></h2>
   <div class="chloe-testi-grid">
     <% [
-      { quote: "I did 3 sessions the night before my interview. The feedback was so precise — I got the offer the next day.", name: "Ana M.", batch: "batch_2187 · Junior Dev", initials: "AM", color: "linear-gradient(135deg,#7C5CF6,#A78BFA)" },
+      { quote: "I did 3 sessions the night before my interview. The feedback was so precise, I got the offer the next day.", name: "Ana M.", batch: "batch_2187 · Junior Dev", initials: "AM", color: "linear-gradient(135deg,#7C5CF6,#A78BFA)" },
       { quote: "As a career changer, I had no idea how to talk about my past in tech. Chloé taught me to reframe everything.", name: "Karim L.", batch: "batch_2194 · Product Manager", initials: "KL", color: "linear-gradient(135deg,#F4703A,#FBBF24)" },
-      { quote: "The follow-up questions make it real. It doesn't let you be vague — exactly like an actual interviewer.", name: "Sofia P.", batch: "batch_2201 · UX Designer", initials: "SP", color: "linear-gradient(135deg,#22A56F,#38BDF8)" }
+      { quote: "The follow-up questions make it real. It doesn't let you be vague, exactly like an actual interviewer.", name: "Sofia P.", batch: "batch_2201 · UX Designer", initials: "SP", color: "linear-gradient(135deg,#22A56F,#38BDF8)" }
     ].each do |t| %>
       <div class="chloe-testi-card">
         <div class="chloe-testi-stars">★★★★★</div>

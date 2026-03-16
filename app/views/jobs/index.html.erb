@@ -21,7 +21,6 @@
 
   <!-- GRID -->
   <div class="chloe-jobs-grid">
-    <% levels = ["Beginner friendly", "Intermediate", "Intermediate", "Advanced"] %>
     <% @jobs.each_with_index do |job, index| %>
       <div class="chloe-job-card">
         <div class="chloe-job-card-top">
@@ -31,11 +30,9 @@
                 job.job_title.include?("UX") ? "🎨" :
                 job.job_title.include?("Data") ? "📊" : "💼" %>
           </div>
-          <span class="chloe-job-level"><%= levels[index] || "Intermediate" %></span>
         </div>
 
         <h2 class="chloe-job-title"><%= job.job_title %></h2>
-        <p class="chloe-job-track">track: "<%= job.job_title.downcase.gsub(" ", "_") %>"</p>
         <p class="chloe-job-desc"><%= job.job_description %></p>
 
         <div class="chloe-job-tags">
