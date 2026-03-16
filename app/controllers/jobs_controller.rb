@@ -4,7 +4,6 @@ class JobsController < ApplicationController
   end
 
   def show
-    @job = Job.find(params[:id])
-    @chats = @job.chats.where(user_id: current_user.id)
+    redirect_to jobs_path
   end
 end

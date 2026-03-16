@@ -99,7 +99,7 @@ class MessagesController < ApplicationController
     save_assistant_message ask_feedback_behavioral
     save_assistant_message "A entrevista terminou! 🎉"
     save_assistant_message ask("Com base em todas as respostas do candidato às 5 perguntas técnicas e 3 perguntas comportamentais, dê um feedback geral caloroso e encorajador. Destaca os pontos fortes e uma sugestão de melhoria. Máximo 4 linhas.")
-    @messages_created = 3
+    @messages_created = 4
   end
 
   def ask(prompt)
