@@ -257,6 +257,14 @@ body.chloe-chat-page {
   color: $limon-dk;
   flex-shrink: 0;
   border: 1.5px solid $limon-dk;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
 }
 
 .chloe-user-name {

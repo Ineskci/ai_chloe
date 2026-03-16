@@ -69,12 +69,11 @@
     <div class="chloe-sidebar-footer">
       <div class="chloe-user-row">
         <div class="chloe-user-av">
-          <%# Show first 2 letters of email as avatar %>
-          <%= current_user.email[0..1].upcase %>
+          <%= image_tag "avatar.jpeg", alt: current_user.email %>
         </div>
         <div>
-          <div class="chloe-user-name"><%= current_user.email.split('@').first %></div>
-          <div class="chloe-user-batch">batch_2203</div>
+           <div class="chloe-user-name"><%= current_user.email.split('@').first.split('.').first.capitalize %></div>
+          <div class="chloe-user-batch"><%= current_user.email %></div>
         </div>
       </div>
     </div>
