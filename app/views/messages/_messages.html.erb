@@ -1,8 +1,9 @@
 <%# Loop over messages and display each one %>
+<% question_number = 0 %>
+<% second_message_id = messages.second&.id %>
 <% messages.each do |message| %>
 
   <% if message.role == "user" %>
-    <%# User message — aligned to the RIGHT %>
     <div class="chloe-msg-row user">
       <div class="chloe-msg-sender" style="justify-content: flex-end;">
         You
@@ -13,16 +14,20 @@
     </div>
 
   <% elsif message.role == "assistant" %>
-    <%# Chloé's message — aligned to the LEFT %>
+    <% is_icebreaker = message.id == second_message_id %>
+    <% is_question = message.content.include?("A)") && message.content.include?("B)") && message.content.include?("C)") && !is_icebreaker %>
+    <% question_number += 1 if is_question %>
     <div class="chloe-msg-row">
       <div class="chloe-msg-sender">
         Chloé 2.0
       </div>
       <div class="chloe-bubble chloe-bubble-chloe">
+        <% if is_question %>
+          <strong>Pergunta <%= question_number %>/8</strong>
+        <% end %>
         <%= simple_format(ERB::Util.html_escape(message.content)) %>
       </div>
     </div>
 
   <% end %>
-
 <% end %>
