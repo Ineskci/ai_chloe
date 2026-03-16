@@ -1,18 +1,63 @@
-<h2>Forgot your password?</h2>
+<% content_for :no_layout, true %>
 
-<%= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
-  <%= f.error_notification %>
+<div class="chloe-auth">
 
-  <div class="form-inputs">
-    <%= f.input :email,
-                required: true,
-                autofocus: true,
-                input_html: { autocomplete: "email" } %>
+  <!-- LEFT PANEL -->
+  <div class="chloe-auth-left">
+    <a href="/" class="chloe-nav-logo">Chloé <span class="chloe-nav-badge">2.0</span></a>
+
+    <div>
+      <span class="chloe-auth-badge">● AI Interview Coach</span>
+      <h1 class="chloe-auth-headline">Reset your<br><em>password.</em></h1>
+      <p class="chloe-auth-sub">Enter your email and we'll send you instructions to get back on track.</p>
+    </div>
+
+    <div class="chloe-auth-quote">
+      <p>"The secret of getting ahead is getting started."</p>
+      <div class="chloe-auth-quote-author">
+        <div class="chloe-auth-avatar">MT</div>
+        <div>
+          <strong>Mark Twain</strong>
+          <span>batch_classic · Writer</span>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="form-actions">
-    <%= f.button :submit, "Send me password reset instructions" %>
-  </div>
-<% end %>
+  <!-- RIGHT PANEL -->
+  <div class="chloe-auth-right">
+    <a href="<%= new_user_session_path %>" class="chloe-auth-back">← Back to login</a>
 
-<%= render "devise/shared/links" %>
+    <div class="chloe-auth-form-wrapper">
+
+      <div class="chloe-auth-tabs">
+        <a href="<%= new_user_session_path %>" class="chloe-auth-tab">Log in</a>
+        <a href="<%= new_user_registration_path %>" class="chloe-auth-tab">Sign up</a>
+      </div>
+
+      <h2 class="chloe-auth-title">Forgot your password? 🔑</h2>
+      <p class="chloe-auth-subtitle">We'll send you a reset link right away.</p>
+
+      <%= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+        <%= f.error_notification %>
+
+        <div class="chloe-form-inputs">
+          <%= f.input :email,
+                      required: true,
+                      autofocus: true,
+                      label: "Email",
+                      placeholder: "you@example.com",
+                      input_html: { autocomplete: "email" } %>
+        </div>
+
+        <div class="chloe-form-actions">
+          <%= f.button :submit, "Send reset instructions →", class: "chloe-btn-primary chloe-btn-full" %>
+        </div>
+      <% end %>
+
+      <p class="chloe-auth-footer">🎓 Le Wagon SP · Batch #2203</p>
+
+    </div>
+  </div>
+
+</div>
