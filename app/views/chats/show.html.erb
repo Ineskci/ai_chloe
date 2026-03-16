@@ -8,7 +8,7 @@
 <div class="chloe-chat-topnav">
 
   <%# Logo on the left %>
-  <a href="/" class="chloe-topnav-logo">
+  <a href="<%= jobs_path %>" class="chloe-topnav-logo">
     Chloé
     <span class="chloe-logo-pill">2.0</span>
   </a>
@@ -27,7 +27,7 @@
       <span class="chloe-live-dot"></span>
       session active
     </div>
-    <%= link_to "← All tracks", job_path(@job), class: "chloe-btn-back" %>
+    <%= link_to "← All tracks", jobs_path, class: "chloe-btn-ghost" %>
   </div>
 
 </div>
@@ -101,6 +101,7 @@
         — Session started · <%= @job.job_title %> track · <%= @chat.created_at.strftime("%b %d, %Y") %> —
       </div>
       <%= render "messages/messages", messages: @chat.messages %>
+       <div id="messages-bottom"></div>
     </div>
 
     <%# Input area at the bottom %>
@@ -110,3 +111,6 @@
 
   </div>
 </div>
+<script>
+  document.getElementById("messages-bottom")?.scrollIntoView({ behavior: "smooth" });
+</script>
