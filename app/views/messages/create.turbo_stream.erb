@@ -2,8 +2,12 @@
   <%= turbo_stream.update "chat_title", @chat.title %>
 <% end %>
 
-<%= turbo_stream.append "messages" do %>
-  <%= render "messages/messages", messages: @chat.messages.last(@messages_created || 3) %>
+<%= turbo_stream.update "messages" do %>
+  <div class="chloe-system-msg">
+    — Session started · <%= @chat.job.job_title %> track · <%= @chat.created_at.strftime("%b %d, %Y") %> —
+  </div>
+  <%= render "messages/messages", messages: @chat.messages %>
+  <div id="messages-bottom"></div>
 <% end %>
 
 <%= turbo_stream.update "new_message_container" do %>
