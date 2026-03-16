@@ -18,11 +18,11 @@ User.destroy_all
 
 # 2. Create users
 puts "Creating users..."
-User.create!(email: "test@test.com", password: "123456")
-User.create!(email: "ines@lewagon.com", password: "123456")
-User.create!(email: "gustavo@lewagon.com", password: "123456")
-User.create!(email: "rafaela@lewagon.com", password: "123456")
-User.create!(email: "clara@lewagon.com", password: "123456")
+User.create!(email: "test@test.com", password: "Wagon2026!")
+User.create!(email: "ines@lewagon.com", password: "Wagon2026!")
+User.create!(email: "gustavo@lewagon.com", password: "Wagon2026!")
+User.create!(email: "rafaela@lewagon.com", password: "Wagon2026!")
+User.create!(email: "clara@lewagon.com", password: "Wagon2026!")
 
 # 3. Create the instances 🏗️
 puts "Creating jobs..."
