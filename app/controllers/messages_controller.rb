@@ -49,7 +49,7 @@ class MessagesController < ApplicationController
 
       process_response
 
-      @chat.generate_title_from_first_message
+      @chat.generate_title_from_first_message if @user_count >= 2
 
       respond_to do |format|
         format.turbo_stream
