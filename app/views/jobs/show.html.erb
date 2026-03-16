@@ -1,31 +1,47 @@
-<div class="row">
-  <div class="col">
-    <h1><%= @job.job_title %></h1>
-  </div>
-
-  <div class="col-md-3">
-    <h2>Chats</h2>
-
-    <div class="mb-4">
-      <% if @chats.any? %>
-        <ul>
-          <% @chats.each do |chat| %>
-            <li><%= link_to chat.title, job_chat_path(@job, chat) %></li>
-          <% end %>
-        </ul>
+<div class="chloe-jobs-page">
+  <nav class="chloe-nav">
+    <a href="<%= jobs_path %>" class="chloe-nav-logo">Chloé <span class="chloe-nav-badge">2.0</span></a>
+    <div class="chloe-nav-actions">
+      <% if user_signed_in? %>
+        <%= link_to "Log out", destroy_user_session_path, data: { turbo_method: :delete }, class: "chloe-btn-ghost" %>
       <% else %>
-        <p>There are no chats yet.</p>
+        <%= link_to "Log in", new_user_session_path, class: "chloe-btn-ghost" %>
+        <%= link_to "Sign up", new_user_registration_path, class: "chloe-btn-primary" %>
       <% end %>
     </div>
+  </nav>
 
-<div class="row">
-  <div class="col">
+  <div class="chloe-jobs-header">
+    <span class="chloe-jobs-badge">→ <%= @job.job_title.downcase.gsub(' ', '_') %></span>
     <h1><%= @job.job_title %></h1>
+    <p><%= @job.job_description %></p>
   </div>
-  <div class="col-md-3">
-    <h2>Chats</h2>
-    <!-- ... -->
 
- <%= link_to "New chat", new_job_chat_path(@job), class: "btn btn-primary" %>
+  <div class="chloe-jobs-grid">
+    <% if @chats.any? %>
+      <% @chats.each do |chat| %>
+        <div class="chloe-job-card">
+          <div class="chloe-job-card-top">
+            <div class="chloe-job-icon">💬</div>
+          </div>
+          <h2 class="chloe-job-title"><%= chat.title %></h2>
+          <p class="chloe-job-track"><%= time_ago_in_words(chat.created_at) %> ago</p>
+          <div class="chloe-job-footer">
+            <%= link_to "Continue →", job_chat_path(@job, chat), class: "chloe-job-cta" %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+
+    <div class="chloe-job-card">
+      <div class="chloe-job-card-top">
+        <div class="chloe-job-icon">✨</div>
+      </div>
+      <h2 class="chloe-job-title">New session</h2>
+      <p class="chloe-job-track">Start a fresh interview</p>
+      <div class="chloe-job-footer">
+        <%= link_to "Start practicing →", new_job_chat_path(@job), class: "chloe-job-cta" %>
+      </div>
+    </div>
   </div>
 </div>

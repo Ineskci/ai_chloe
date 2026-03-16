@@ -18,7 +18,6 @@
   <%# Current job track in the middle %>
   <div class="chloe-topnav-track">
     💼 <%= @job.job_title %>
-    <span class="chloe-track-badge"><%= @job.job_title.downcase.gsub(' ', '_') %></span>
   </div>
 
   <%# Right side: live status + back button %>
@@ -43,7 +42,7 @@
     <div class="chloe-sidebar-header">
       <div class="chloe-sidebar-label">// your sessions</div>
       <%# Button to create a new chat session %>
-      <%= link_to new_job_chat_path(@job), class: "chloe-btn-new-session", data: { turbo_method: :post } do %>
+      <%= link_to job_chats_path(@job), class: "chloe-btn-new-session", data: { turbo_method: :post } do %>
         <span class="chloe-plus">+</span>
         New interview session
       <% end %>
@@ -55,10 +54,8 @@
         <%# Active chat gets a special style %>
         <%= link_to job_chat_path(@job, chat),
             class: "chloe-chat-item #{'active' if chat.id == @chat.id}" do %>
-          <div class="chloe-chat-item-title"><%= chat.title %></div>
+          <div class="chloe-chat-item-title"><%= chat.title == "Untitled" ? "Session · #{chat.created_at.strftime("%b %d, %H:%M")}" : chat.title %></div>
           <div class="chloe-chat-item-meta">
-            <span><%= @job.job_title.downcase %></span>
-            <span class="chloe-meta-dot"></span>
             <span><%= time_ago_in_words(chat.created_at) %> ago</span>
           </div>
         <% end %>
@@ -86,8 +83,7 @@
     <%# Challenge bar at the top of chat %>
     <div class="chloe-challenge-bar">
       <div>
-        <div class="chloe-challenge-title" id="chat_title"><%= @chat.title %></div>
-        <div class="chloe-challenge-sub">// <%= @job.job_title.downcase.gsub(' ', '_') %> track</div>
+        <div class="chloe-challenge-title" id="chat_title"><%= @chat.title == "Untitled" ? "Session · #{@chat.created_at.strftime("%b %d")}" : @chat.title %></div>
       </div>
       <div class="chloe-challenge-chips">
         <span class="chloe-chip"><%= @chat.messages.count %> messages</span>
