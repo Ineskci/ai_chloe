@@ -1,9 +1,17 @@
-import { Application } from "@hotwired/stimulus"
+import { Controller } from "@hotwired/stimulus"
 
-const application = Application.start()
+export default class extends Controller {
+  connect() {
+    this.scrollToBottom()
+    this.observer = new MutationObserver(() => this.scrollToBottom())
+    this.observer.observe(this.element, { childList: true, subtree: true })
+  }
 
-// Configure Stimulus development experience
-application.debug = false
-window.Stimulus   = application
+  disconnect() {
+    this.observer.disconnect()
+  }
 
-export { application }
+  scrollToBottom() {
+    this.element.scrollTop = this.element.scrollHeight
+  }
+}

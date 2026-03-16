@@ -8,7 +8,7 @@
         You
       </div>
       <div class="chloe-bubble chloe-bubble-user">
-        <%= simple_format(message.content) %>
+        <%= simple_format(ERB::Util.html_escape(message.content)) %>
       </div>
     </div>
 
@@ -19,7 +19,7 @@
         Chloé 2.0
       </div>
       <div class="chloe-bubble chloe-bubble-chloe">
-        <%= simple_format(message.content) %>
+        <%= simple_format(ERB::Util.html_escape(message.content)) %>
       </div>
     </div>
 
