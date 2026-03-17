@@ -10,32 +10,28 @@ class MessagesController < ApplicationController
     - NUNCA use "Pergunta técnica:", "Pergunta comportamental:" ou "Feedback:" antes de qualquer texto
     - Escreva diretamente sem labels ou títulos
 
+    ## Quebra-gelo
+    Responda de forma calorosa, simpática e com humor à resposta do candidato.
+    Depois PARE. Não escreva mais nada.
+
     ## Perguntas técnicas (5 no total)
-    - SEMPRE 3 opções: A, B, C
-    - ✅ Se acertou: apenas "Correto! ✅"
-    - ❌ Se errou: "Incorreto! ❌ A resposta correta é [X] porque [breve explicação]"
+    - Perguntas abertas — o candidato responde livremente
+    - Se acertou: parabenize de forma calorosa e breve (1 linha)
+    - Se errou: corrija de forma calorosa e encorajadora. Explique a resposta correta em máximo 1 linha
 
     ## Perguntas comportamentais (3 no total)
-    - SEMPRE 3 opções: A, B, C
+    - Perguntas abertas — o candidato responde livremente
     - Não há certo nem errado
-    - Após a resposta: feedback curto, caloroso e encorajador (1-2 linhas)
-
-    ## Quebra-gelo
-    Responda em UMA linha — curta, calorosa e com humor. SEM label antes:
-    - Se A: "Adoro a confiança! 💪 Vamos manter esse ritmo!"
-    - Se B: "Normal! Nervosismo é sinal de que você se importa. 😄 Vamos lá!"
-    - Se C: "Modo guerreiro ativado! 🚀 Vamos nessa!"
-    Depois PARE. Não escreva mais nada.
+    - Após a resposta: feedback curto, caloroso e encorajador (1 linha)
 
     ## Formato
     - Sem labels, sem títulos, sem prefixos
     - Feedback: máximo 1-2 linhas
-    - Pergunta técnica: enunciado + A, B, C em linhas separadas
-    - Pergunta comportamental: enunciado simples e direto
+    - Perguntas: diretas e concisas
   PROMPT
 
   TECHNICAL_TOPICS = ["Ruby on Rails", "JavaScript", "SQL", "HTML", "CSS"].freeze
-  QUESTION_FORMAT = "Formato obrigatório:\n\n[enunciado da pergunta]\nA) [opção]\nB) [opção]\nC) [opção]"
+  QUESTION_FORMAT = "Faça uma pergunta direta e concisa. Não uses opções A, B, C — o candidato responde livremente."
 
   def create
     @job = Job.find(params[:job_id])
@@ -87,12 +83,12 @@ class MessagesController < ApplicationController
 
   def handle_last_technical_question
     save_assistant_message ask_feedback_technical
-    save_assistant_message ask("Agora faça a primeira pergunta comportamental relacionada com a vaga. #{QUESTION_FORMAT}")
+    save_assistant_message ask("Agora faça a primeira pergunta comportamental relacionada com a vaga de #{@job.job_title}. #{QUESTION_FORMAT}")
   end
 
   def handle_behavioral_question
     save_assistant_message ask_feedback_behavioral
-    save_assistant_message ask("Agora faça a próxima pergunta comportamental relacionada com a vaga. #{QUESTION_FORMAT}")
+    save_assistant_message ask("Agora faça a próxima pergunta comportamental relacionada com a vaga de #{@job.job_title}. #{QUESTION_FORMAT}")
   end
 
   def handle_last_behavioral_question
@@ -111,11 +107,13 @@ class MessagesController < ApplicationController
   end
 
   def ask_feedback_technical
-    ask("A resposta do candidato foi '#{@message.content}'. Esta resposta está correta ou incorreta? Responda apenas com 'Correto! ✅' ou 'Incorreto! ❌ A resposta correta é [X] porque [breve explicação]'")
+    ask("A resposta do candidato foi '#{@message.content}'.
+    Se estiver correta: parabenize de forma calorosa e breve (1 linha).
+    Se estiver incorreta: corrija de forma calorosa e encorajadora. Explique a resposta correta em máximo 1 linha.")
   end
 
   def ask_feedback_behavioral
-    ask("O candidato respondeu '#{@message.content}'. Dê um feedback curto, caloroso e encorajador. Máximo 2 linhas.")
+    ask("O candidato respondeu '#{@message.content}'. Dê um feedback curto, caloroso e encorajador. Máximo 1 linha.")
   end
 
   def save_assistant_message(content)
@@ -136,10 +134,9 @@ class MessagesController < ApplicationController
 
     PARTE 2 — 3 perguntas comportamentais (uma por mensagem) relacionadas com #{@job.job_title}:
     - Perguntas curtas e diretas
-    - Respostas curtas esperadas
+    - Respostas livres e abertas
     - Não há certo nem errado
     - Dê um feedback curto e caloroso após cada resposta comportamental
-    - SEMPRE use opções A, B, C nas perguntas comportamentais
 
     TOTAL: 8 perguntas. Não repita perguntas. Não salte nenhuma."
   end
