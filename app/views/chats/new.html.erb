@@ -18,7 +18,6 @@
   <%# Current job track in the middle %>
   <div class="chloe-topnav-track">
     💼 <%= @job.job_title %>
-    <span class="chloe-track-badge"><%= @job.job_title.downcase.gsub(' ', '_') %></span>
   </div>
 
   <%# Right side: back button %>
@@ -49,10 +48,8 @@
     <div class="chloe-sidebar-list">
       <% current_user.chats.where(job: @job).order(created_at: :desc).each do |chat| %>
         <%= link_to job_chat_path(@job, chat), class: "chloe-chat-item" do %>
-          <div class="chloe-chat-item-title"><%= chat.title %></div>
+          <div class="chloe-chat-item-title"><%= chat.title == "Untitled" ? "Session · #{chat.created_at.strftime("%b %d, %H:%M")}" : chat.title %></div>
           <div class="chloe-chat-item-meta">
-            <span><%= @job.job_title.downcase %></span>
-            <span class="chloe-meta-dot"></span>
             <span><%= time_ago_in_words(chat.created_at) %> ago</span>
           </div>
         <% end %>
@@ -79,16 +76,17 @@
 
     <div style="text-align: center; max-width: 420px; padding: 40px;">
 
-      <div style="font-family: var(--font-mono, monospace); font-size: 11px; color: #999; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 16px;">
-        // new session
+      <div style="margin-bottom: 24px;">
+        <% job_image = "jobs/#{@job.job_title.downcase.gsub(' ', '_')}.jpg" %>
+        <%= image_tag job_image, alt: @job.job_title, style: "width: 234px; height: 234px; object-fit: cover; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.12);" rescue nil %>
       </div>
 
-      <h1 style="font-family: 'Fraunces', serif; font-size: 28px; font-weight: 700; margin-bottom: 8px;">
+      <h1 style="font-family: 'Fraunces', serif; font-size: 28px; font-weight: 700; margin-bottom: 12px;">
         <%= @job.job_title %>
       </h1>
 
       <p style="font-size: 14px; color: #666; margin-bottom: 32px;">
-        Start a new AI interview session for this track.
+        <%= @job.job_description %>
       </p>
 
       <%= simple_form_for [@job, @chat] do |f| %>

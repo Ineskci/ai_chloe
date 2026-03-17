@@ -28,8 +28,8 @@ User.create!(email: "clara@lewagon.com", password: "Wagon2026!")
 puts "Creating jobs..."
 Job.create!([
   {
-    job_title: "Junior Developer",
-    job_description: "Entry-level software development role focusing on Ruby on Rails and JavaScript."
+    job_title: "Web Developer",
+    job_description: "Fullstack software development role focusing on Ruby on Rails and JavaScript."
   },
   {
     job_title: "Product Manager",
