@@ -72,52 +72,88 @@ class MessagesController < ApplicationController
   end
 
   def handle_icebreaker
-    save_assistant_message ask(@message.content)
-    save_assistant_message ask_fresh("Agora faça a primeira pergunta técnica sobre #{TECHNICAL_TOPICS.first}. #{QUESTION_FORMAT}")
+    ask("O candidato disse: '#{@message.content}'.
+    Responde de forma calorosa, simpática e com humor.
+    Máximo 1 linha.
+    NÃO faças nenhuma pergunta.
+    NÃO introduzas o próximo passo.")
+    ask_fresh("Agora faça a primeira pergunta técnica sobre #{TECHNICAL_TOPICS.first}. #{QUESTION_FORMAT}")
   end
 
   def handle_technical_question
-    save_assistant_message ask_feedback_technical
-    save_assistant_message ask("Agora faça a próxima pergunta técnica. #{QUESTION_FORMAT}")
+    ask(ask_feedback_technical_prompt)
+    ask("Agora faça a próxima pergunta técnica. #{QUESTION_FORMAT}")
   end
 
   def handle_last_technical_question
-    save_assistant_message ask_feedback_technical
-    save_assistant_message ask("Agora faça a primeira pergunta comportamental relacionada com a vaga de #{@job.job_title}. #{QUESTION_FORMAT}")
+    ask(ask_feedback_technical_prompt)
+    ask("Agora faça a primeira pergunta comportamental relacionada com a vaga de #{@job.job_title}. #{QUESTION_FORMAT}")
   end
 
   def handle_behavioral_question
-    save_assistant_message ask_feedback_behavioral
-    save_assistant_message ask("Agora faça a próxima pergunta comportamental relacionada com a vaga de #{@job.job_title}. #{QUESTION_FORMAT}")
+    ask(ask_feedback_behavioral_prompt)
+    ask("Agora faça a próxima pergunta comportamental relacionada com a vaga de #{@job.job_title}. #{QUESTION_FORMAT}")
   end
 
   def handle_last_behavioral_question
-    save_assistant_message ask_feedback_behavioral
-    save_assistant_message "A entrevista terminou! 🎉"
-    save_assistant_message ask("Com base em todas as respostas do candidato às 5 perguntas técnicas e 3 perguntas comportamentais, dê um feedback geral caloroso e encorajador. Destaca os pontos fortes e uma sugestão de melhoria. Máximo 4 linhas.")
-    @messages_created = 4
+    ask(ask_feedback_behavioral_prompt)
+    save_assistant_message("A entrevista terminou! 🎉")
+    ask("Com base em todas as respostas do candidato às 5 perguntas técnicas e 3 perguntas comportamentais, dê um feedback geral caloroso e encorajador. Destaca os pontos fortes e uma sugestão de melhoria. Máximo 4 linhas.")
   end
 
   def ask(prompt)
-    @ruby_llm_chat.with_instructions(instructions).ask(prompt).content
+    @assistant_message = @chat.messages.create(role: "assistant", content: "")
+
+    @ruby_llm_chat.with_instructions(instructions).ask(prompt) do |chunk|
+      next if chunk.content.blank?
+      @assistant_message.content += chunk.content
+      broadcast_replace(@assistant_message)
+    end
+
+    @assistant_message.update(content: @assistant_message.content)
+    @assistant_message.content
   end
 
   def ask_fresh(prompt)
-    RubyLLM.chat(model: "gpt-4o-mini").with_instructions(instructions).ask(prompt).content
+    @assistant_message = @chat.messages.create(role: "assistant", content: "")
+
+    RubyLLM.chat(model: "gpt-4o-mini").with_instructions(instructions).ask(prompt) do |chunk|
+      next if chunk.content.blank?
+      @assistant_message.content += chunk.content
+      broadcast_replace(@assistant_message)
+    end
+
+    @assistant_message.update(content: @assistant_message.content)
+    @assistant_message.content
   end
 
-  def ask_feedback_technical
-    ask("A resposta do candidato foi '#{@message.content}'.
+  def ask_feedback_technical_prompt
+    "A resposta do candidato foi '#{@message.content}'.
     Se estiver correta: parabenize de forma calorosa e breve (1 linha).
-    Se estiver incorreta: corrija de forma calorosa e encorajadora. Explique a resposta correta em máximo 1 linha.")
+    Se estiver incorreta: corrija de forma calorosa e encorajadora. Explique a resposta correta em máximo 1 linha.
+    NÃO faças nenhuma pergunta.
+    NÃO digas 'Vamos para a próxima' ou qualquer frase que introduza a próxima pergunta."
   end
 
-  def ask_feedback_behavioral
-    ask("O candidato respondeu '#{@message.content}'. Dê um feedback curto, caloroso e encorajador. Máximo 1 linha.")
+  def ask_feedback_behavioral_prompt
+    "O candidato respondeu '#{@message.content}'.
+    Dê APENAS um feedback curto, caloroso e encorajador.
+    Máximo 1 linha.
+    NÃO faças nenhuma pergunta.
+    NÃO digas 'Vamos para a próxima' ou qualquer frase que introduza a próxima pergunta."
   end
 
   def save_assistant_message(content)
     @chat.messages.create(role: "assistant", content: content)
+  end
+
+  def broadcast_replace(message)
+    Turbo::StreamsChannel.broadcast_replace_to(
+      @chat,
+      target: helpers.dom_id(message),
+      partial: "messages/message",
+      locals: { message: message }
+    )
   end
 
   def job_context
@@ -147,6 +183,7 @@ class MessagesController < ApplicationController
 
   def build_conversation_history
     @chat.messages.last(10).each do |message|
+      next if message.content.blank?
       @ruby_llm_chat.add_message(role: message.role, content: message.content)
     end
   end

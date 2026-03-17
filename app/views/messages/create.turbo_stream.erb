@@ -1,15 +1,9 @@
+<%# Update the chat title if it was just generated %>
 <% if @chat.title_previously_changed? %>
   <%= turbo_stream.update "chat_title", @chat.title %>
 <% end %>
 
-<%= turbo_stream.update "messages" do %>
-  <div class="chloe-system-msg">
-    — Session started · <%= @chat.job.job_title %> track · <%= @chat.created_at.strftime("%b %d, %Y") %> —
-  </div>
-  <%= render "messages/messages", messages: @chat.messages %>
-  <div id="messages-bottom"></div>
-<% end %>
-
+<%# Reset the input form after sending a message %>
 <%= turbo_stream.update "new_message_container" do %>
   <%= render "messages/form", job: @job, chat: @chat, message: Message.new %>
 <% end %>
