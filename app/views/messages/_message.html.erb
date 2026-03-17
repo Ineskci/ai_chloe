@@ -1,0 +1,21 @@
+<% if message.role == "user" %>
+  <div class="chloe-msg-row user">
+    <div class="chloe-msg-sender" style="justify-content: flex-end;">
+      You
+    </div>
+    <div class="chloe-bubble chloe-bubble-user">
+      <%= simple_format(ERB::Util.html_escape(message.content)) %>
+    </div>
+  </div>
+
+<% elsif message.role == "assistant" %>
+  <div class="chloe-msg-row" id="<%= dom_id(message) %>">
+    <div class="chloe-msg-sender">
+      Chloé 2.0
+    </div>
+    <div class="chloe-bubble chloe-bubble-chloe">
+      <%= message.content.present? ? simple_format(ERB::Util.html_escape(message.content)) : "..." %>
+    </div>
+  </div>
+
+<% end %>
