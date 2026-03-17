@@ -41,13 +41,10 @@ class MessagesController < ApplicationController
     if @message.save
       @ruby_llm_chat = RubyLLM.chat(model: "gpt-4o-mini")
       @user_count = @chat.messages.where(role: "user").count
-      # Don't load history for the first message — fresh start
       build_conversation_history unless @user_count == 1
 
-      # Route to the correct handler based on where we are in the interview
       process_response
 
-      # Generate a title from the first user message (from message 2 onwards)
       @chat.generate_title_from_first_message if @user_count >= 2
 
       respond_to do |format|
@@ -64,7 +61,6 @@ class MessagesController < ApplicationController
 
   private
 
-  # Routes to the correct handler based on how many user messages have been sent
   def process_response
     case @user_count
     when 1 then handle_icebreaker
@@ -75,41 +71,36 @@ class MessagesController < ApplicationController
     end
   end
 
-  # First user message — respond to icebreaker + ask first technical question
-  # ask() already creates and broadcasts the message — no need for save_assistant_message
   def handle_icebreaker
-    ask(@message.content)
+    ask("O candidato disse: '#{@message.content}'.
+    Responde de forma calorosa, simpática e com humor.
+    Máximo 1 linha.
+    NÃO faças nenhuma pergunta.
+    NÃO introduzas o próximo passo.")
     ask_fresh("Agora faça a primeira pergunta técnica sobre #{TECHNICAL_TOPICS.first}. #{QUESTION_FORMAT}")
   end
 
-  # Technical questions 2 to 5 — give feedback + ask next technical question
   def handle_technical_question
     ask(ask_feedback_technical_prompt)
     ask("Agora faça a próxima pergunta técnica. #{QUESTION_FORMAT}")
   end
 
-  # Last technical question (6th user message) — give feedback + ask first behavioral question
   def handle_last_technical_question
     ask(ask_feedback_technical_prompt)
     ask("Agora faça a primeira pergunta comportamental relacionada com a vaga de #{@job.job_title}. #{QUESTION_FORMAT}")
   end
 
-  # Behavioral questions 1 and 2 — give feedback + ask next behavioral question
   def handle_behavioral_question
     ask(ask_feedback_behavioral_prompt)
     ask("Agora faça a próxima pergunta comportamental relacionada com a vaga de #{@job.job_title}. #{QUESTION_FORMAT}")
   end
 
-  # Last behavioral question (9th user message) — give feedback + end interview + final feedback
   def handle_last_behavioral_question
     ask(ask_feedback_behavioral_prompt)
-    # Fixed message — not streamed, just created directly
     save_assistant_message("A entrevista terminou! 🎉")
     ask("Com base em todas as respostas do candidato às 5 perguntas técnicas e 3 perguntas comportamentais, dê um feedback geral caloroso e encorajador. Destaca os pontos fortes e uma sugestão de melhoria. Máximo 4 linhas.")
   end
 
-  # Ask the LLM and stream the response chunk by chunk via Action Cable
-  # Creates an empty message first, then fills it progressively in the browser
   def ask(prompt)
     @assistant_message = @chat.messages.create(role: "assistant", content: "")
 
@@ -119,13 +110,10 @@ class MessagesController < ApplicationController
       broadcast_replace(@assistant_message)
     end
 
-    # Save the final complete content to the database
     @assistant_message.update(content: @assistant_message.content)
     @assistant_message.content
   end
 
-  # Same as ask but with a fresh LLM instance (no conversation history)
-  # Used for the first technical question to avoid context contamination
   def ask_fresh(prompt)
     @assistant_message = @chat.messages.create(role: "assistant", content: "")
 
@@ -139,25 +127,26 @@ class MessagesController < ApplicationController
     @assistant_message.content
   end
 
-  # Returns the prompt string for technical feedback — used by ask()
   def ask_feedback_technical_prompt
     "A resposta do candidato foi '#{@message.content}'.
     Se estiver correta: parabenize de forma calorosa e breve (1 linha).
-    Se estiver incorreta: corrija de forma calorosa e encorajadora. Explique a resposta correta em máximo 1 linha."
+    Se estiver incorreta: corrija de forma calorosa e encorajadora. Explique a resposta correta em máximo 1 linha.
+    NÃO faças nenhuma pergunta.
+    NÃO digas 'Vamos para a próxima' ou qualquer frase que introduza a próxima pergunta."
   end
 
-  # Returns the prompt string for behavioral feedback — used by ask()
   def ask_feedback_behavioral_prompt
-    "O candidato respondeu '#{@message.content}'. Dê um feedback curto, caloroso e encorajador. Máximo 1 linha."
+    "O candidato respondeu '#{@message.content}'.
+    Dê APENAS um feedback curto, caloroso e encorajador.
+    Máximo 1 linha.
+    NÃO faças nenhuma pergunta.
+    NÃO digas 'Vamos para a próxima' ou qualquer frase que introduza a próxima pergunta."
   end
 
-  # Save a fixed message (not streamed) — only used for "A entrevista terminou! 🎉"
   def save_assistant_message(content)
     @chat.messages.create(role: "assistant", content: content)
   end
 
-  # Push the updated message HTML to the browser via Action Cable in real time
-  # Replaces the div with id="message_42" with the new content
   def broadcast_replace(message)
     Turbo::StreamsChannel.broadcast_replace_to(
       @chat,
@@ -167,7 +156,6 @@ class MessagesController < ApplicationController
     )
   end
 
-  # Context about the job and the mandatory question sequence
   def job_context
     "A vaga para a qual o candidato está se preparando é: #{@job.job_title}. #{@job.job_description}
 
@@ -189,13 +177,10 @@ class MessagesController < ApplicationController
     TOTAL: 8 perguntas. Não repita perguntas. Não salte nenhuma."
   end
 
-  # Combine system prompt and job context into full instructions
   def instructions
     [SYSTEM_PROMPT, job_context].compact.join("\n\n")
   end
 
-  # Load the last 10 messages into the LLM conversation history
-  # Skip blank messages (created during streaming but not yet filled)
   def build_conversation_history
     @chat.messages.last(10).each do |message|
       next if message.content.blank?
