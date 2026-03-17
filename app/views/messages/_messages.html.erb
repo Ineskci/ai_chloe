@@ -1,6 +1,6 @@
 <%# Loop over messages and display each one %>
 <% question_number = 0 %>
-<% second_message_id = messages.second&.id %>
+<% assistant_count = 0 %>
 <% messages.each do |message| %>
 
   <% if message.role == "user" %>
@@ -14,8 +14,10 @@
     </div>
 
   <% elsif message.role == "assistant" %>
-    <% is_icebreaker = message.id == second_message_id %>
-    <% is_question = message.content.include?("A)") && message.content.include?("B)") && message.content.include?("C)") && !is_icebreaker %>
+    <% assistant_count += 1 %>
+    <%# Mensagens 1=saudação, 2=quebra-gelo, 3=resposta quebra-gelo, 4=pergunta1... %>
+    <%# Perguntas estão nas posições 4, 6, 8, 10, 12, 14, 16, 18 (pares a partir de 4) %>
+    <% is_question = assistant_count >= 4 && assistant_count.even? %>
     <% question_number += 1 if is_question %>
     <div class="chloe-msg-row">
       <div class="chloe-msg-sender">

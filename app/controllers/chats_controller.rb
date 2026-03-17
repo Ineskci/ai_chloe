@@ -17,8 +17,8 @@ class ChatsController < ApplicationController
       # Primeira caixa — saudação (texto fixo)
       @chat.messages.create(role: "assistant", content: "Olá, #{first_name}! 👋 Eu sou a Chloé 2.0, sua coach de entrevistas! Pronto para treinar sua entrevista de #{@job.job_title}?")
 
-      # Segunda caixa — quebra-gelo (texto fixo)
-      @chat.messages.create(role: "assistant", content: "Escolha como está se sentindo:\nA) Super confiante 💪\nB) Um pouco nervoso 😅\nC) Pronto para começar! 🚀")
+      # Segunda caixa — quebra-gelo (resposta livre)
+      @chat.messages.create(role: "assistant", content: "Antes de começarmos, conta-me: como você está se sentindo hoje para essa entrevista?")
 
       redirect_to job_chat_path(@job, @chat)
     else
