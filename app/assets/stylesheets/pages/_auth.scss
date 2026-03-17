@@ -110,9 +110,9 @@
   flex: 1;
   background-color: $paper;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  padding: 3rem;
+  padding: 5rem 3rem 3rem;
   overflow-y: auto;
   position: relative;
 }
