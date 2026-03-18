@@ -15,8 +15,8 @@ Rails.application.routes.draw do
   # root "posts#index"
   # resources :jobs, only: [:index, :show] do
   resources :jobs, only: [:index, :show] do
-    resources :chats, only: [:new, :create, :show] do
-      resources :messages, only: [:create]
+  resources :chats, only: [:new, :create, :show, :destroy] do
+    resources :messages, only: [:create]
     end
   end
 end

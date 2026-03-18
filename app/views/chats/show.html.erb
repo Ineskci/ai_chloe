@@ -7,7 +7,6 @@
 <%# ============================================ %>
 <div class="chloe-chat-topnav">
 
-  <%# Logo — clicking goes back to jobs list %>
   <a href="<%= jobs_path %>" class="chloe-topnav-logo">
     Chloé
     <span class="chloe-logo-pill">2.0</span>
@@ -15,18 +14,15 @@
 
   <div class="chloe-topnav-divider"></div>
 
-  <%# Current job track in the middle %>
   <div class="chloe-topnav-track">
     💼 <%= @job.job_title %>
   </div>
 
-  <%# Right side: live status + back button %>
   <div class="chloe-topnav-right">
     <div class="chloe-status-live">
       <span class="chloe-live-dot"></span>
       session active
     </div>
-    <%# Back to jobs list — data-turbo false forces full page reload %>
     <%= link_to "← All tracks", jobs_path, class: "chloe-btn-ghost" %>
   </div>
 
@@ -37,44 +33,36 @@
 <%# ============================================ %>
 <div class="chloe-chat-main">
 
-  <%# ---- SIDEBAR: list of past chats ---- %>
+  <%# ---- SIDEBAR ---- %>
   <aside class="chloe-chat-sidebar">
 
     <div class="chloe-sidebar-header">
       <div class="chloe-sidebar-label">// your sessions</div>
-      <%# Button to create a new chat — POST request via Turbo %>
       <%= link_to job_chats_path(@job), class: "chloe-btn-new-session", data: { turbo_method: :post } do %>
         <span class="chloe-plus">+</span>
         New interview session
       <% end %>
     </div>
+<div class="chloe-sidebar-list">
+  <% current_user.chats.where(job: @job).order(created_at: :desc).each do |chat| %>
+    <%= link_to job_chat_path(@job, chat),
+        class: "chloe-chat-item #{'active' if chat.id == @chat.id}" do %>
+      <div class="chloe-chat-item-title">
+        <%= chat.title == "Untitled" ? "Session · #{chat.created_at.strftime("%b %d, %H:%M")}" : chat.title %>
+      </div>
+      <div class="chloe-chat-item-meta">
+        <span><%= time_ago_in_words(chat.created_at) %> ago</span>
+      </div>
+    <% end %>
+  <% end %>
+</div>
 
-    <%# List of all chats for this job, newest first %>
-    <div class="chloe-sidebar-list">
-      <% current_user.chats.where(job: @job).order(created_at: :desc).each do |chat| %>
-        <%# Active chat gets a special highlighted style %>
-        <%= link_to job_chat_path(@job, chat),
-            class: "chloe-chat-item #{'active' if chat.id == @chat.id}" do %>
-          <%# Show date if title hasn't been generated yet %>
-          <div class="chloe-chat-item-title">
-            <%= chat.title == "Untitled" ? "Session · #{chat.created_at.strftime("%b %d, %H:%M")}" : chat.title %>
-          </div>
-          <div class="chloe-chat-item-meta">
-            <span><%= time_ago_in_words(chat.created_at) %> ago</span>
-          </div>
-        <% end %>
-      <% end %>
-    </div>
-
-    <%# User info at the bottom of sidebar %>
     <div class="chloe-sidebar-footer">
       <div class="chloe-user-row">
-        <%# Avatar image %>
         <div class="chloe-user-av">
           <%= image_tag "avatar.jpeg", alt: current_user.email %>
         </div>
         <div>
-          <%# Show first name from email %>
           <div class="chloe-user-name">
             <%= current_user.email.split('@').first.split('.').first.capitalize %>
           </div>
@@ -88,10 +76,8 @@
   <%# ---- CHAT AREA ---- %>
   <div class="chloe-chat-area">
 
-    <%# Bar at the top showing chat title and message count %>
     <div class="chloe-challenge-bar">
       <div>
-        <%# Show date if title hasn't been generated yet %>
         <div class="chloe-challenge-title" id="chat_title">
           <%= @chat.title == "Untitled" ? "Session · #{@chat.created_at.strftime("%b %d")}" : @chat.title %>
         </div>
@@ -101,27 +87,16 @@
       </div>
     </div>
 
-    <%# Subscribe this browser tab to the chat's Action Cable channel %>
-    <%# This allows the server to push new messages in real time %>
     <%= turbo_stream_from @chat %>
 
-    <%# Messages zone — new messages are appended here via Action Cable %>
     <div class="chloe-messages" id="messages">
-
-      <%# System message showing when the session started %>
       <div class="chloe-system-msg">
         — Session started · <%= @job.job_title %> track · <%= @chat.created_at.strftime("%b %d, %Y") %> —
       </div>
-
-      <%# Render all existing messages %>
       <%= render "messages/messages", messages: @chat.messages %>
-
-      <%# Invisible anchor at the bottom — used by JS to scroll down %>
       <div id="messages-bottom"></div>
-
     </div>
 
-    <%# Input area at the bottom — form to send a new message %>
     <div class="chloe-input-area" id="new_message_container">
       <%= render "messages/form", job: @job, chat: @chat, message: @message %>
     </div>
@@ -129,8 +104,33 @@
   </div>
 </div>
 
-<%# Scroll to the bottom when the page loads %>
-<%# The ?. operator prevents errors if the element doesn't exist %>
 <script>
-  document.getElementById("messages-bottom")?.scrollIntoView({ behavior: "smooth" });
+  function scrollToBottom() {
+    var messages = document.getElementById("messages");
+    if (messages) messages.scrollTop = messages.scrollHeight;
+  }
+
+  scrollToBottom();
+
+  document.addEventListener("turbo:before-stream-render", function() {
+    setTimeout(scrollToBottom, 100);
+  });
+
+  var scrollTimer;
+  var messagesDiv = document.getElementById("messages");
+  if (messagesDiv) {
+    var observer = new MutationObserver(function() {
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(scrollToBottom, 80);
+    });
+    observer.observe(messagesDiv, { childList: true, subtree: true, characterData: true });
+  }
+
+  document.addEventListener("keydown", function(e) {
+    var input = document.querySelector(".chloe-msg-input");
+    if (e.key === "Enter" && !e.shiftKey && document.activeElement === input) {
+      e.preventDefault();
+      document.querySelector(".chloe-send-btn").click();
+    }
+  });
 </script>

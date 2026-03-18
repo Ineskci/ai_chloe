@@ -36,6 +36,13 @@ class ChatsController < ApplicationController
 
   private
 
+  def destroy
+    @job = Job.find(params[:job_id])
+    @chat = current_user.chats.find(params[:id])
+    @chat.destroy
+    redirect_to job_path(@job), notice: "Sessão apagada."
+  end
+
   def job_context
     "O candidato está se preparando para a vaga de: #{@job.job_title}. #{@job.job_description}"
   end
